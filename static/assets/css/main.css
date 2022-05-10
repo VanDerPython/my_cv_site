@@ -6,9 +6,7 @@ body {
   font-size: 16px;
   text-align:center;
   line-height:25px;
-  margin-top:0px;
 }
-
 h1 {
 line-height:45px;
 }
@@ -25,19 +23,24 @@ font-weight:600;
 margin:0;
 margin-top:10px;
 }
-h6 {
-font-size:15px;
-font-weight:600;
+
+.box-text-style {
+color:#393E46;
+font-size:12px;
+line-height:15px;
+font-weight:300;
+padding:5%
 }
 
-
 /* Навигация*/
+
 
 .navbar-brand {
 font-weight:900;
 font-size:17px;
 
 }
+
 .nav-item{
 font-weight:600;
 margin-left:10px;
@@ -47,21 +50,18 @@ font-size:13px;
 .navbar{
 margin:0;
 padding:0;
-justify-content:center;
-}
 
+justify-content:center;
+
+}
 @media only screen and (min-width: 768px) {
    .navbar {
     height: 00px !important;
    }
 }
 
-/* Фотография */
-.image{
-width:250px; /* you can use % */
-    height: auto;
-}
-/* ----- Главный экран-------*/
+
+
 /* Картинка на главном экране */
 .homepage-image{
 display:block;
@@ -83,11 +83,13 @@ header {
 padding-bottom:30px;
 }
 /*  Блок стеков технологий*/
+
 #work {
 color:#EEEEEE;
 font-weight:900;
 background-color:#00ADB5;
 }
+
 .card-container {
 display: flex;
 flex-wrap: wrap;
@@ -96,9 +98,8 @@ text-align:center;
 position:relative;
 margin: 20 auto;
 padding: 9px;
-}
-/* Карточки */
 
+}
 .card {
 width: 200px;
 height: 180px;
@@ -111,14 +112,6 @@ box-shadow: 0 0 12px rgb(63, 63, 63);
 }
 .row{
 justify-content:center;
-}
-
-.box-text-style {
-color:#393E46;
-font-size:12px;
-line-height:15px;
-font-weight:300;
-padding:5%
 }
 /*Font Awesome */
 .fa:before{
@@ -154,7 +147,35 @@ background-color:#EEEEEE;
 color:#393E46;
 }
 
-/*Портфоллио */
+
+.card-portfolio{
+width: 250px;
+height: 265px;
+padding:0px;
+border-radius:12px;
+background-color: #EEEEEE;
+box-shadow: 0
+margin:0 20px;
+}
+
+.image{
+width:250px; /* you can use % */
+    height: auto;
+}
+
+
+#contact {
+background-color:#222831;
+}
+#portfolio{
+background-color:#EEEEEE;
+
+}
+
+#portfolio{
+background-color:#EEEEEE;
+
+}
 #portfolio {
 color: black;
 font-weight:300;
@@ -176,15 +197,6 @@ justify-content:center;
 color:white;
 }
 
-/* Связь со мной */
-
-#contact{
-background-color:#222831;
-font-size:11px;
-padding:0;
-margin:0;
-}
-
 .contact-form{
 justify-content:center;
 padding:6px;
@@ -194,6 +206,13 @@ color:black;
 .textarea{
 width:300px;
 height:200px;
+}
+
+
+#contact{
+font-size:11px;
+padding:0;
+margin:0;
 }
 .footer-header{
 padding:0;
@@ -210,44 +229,23 @@ padding-top:5px;
 padding:0;
 margin:0;
 }
-/* Подвал */
 .copyright{
 font-size:5px;
 margin:0;
 }
 
-
-
-
-------
-
-
-
-
-
-
-.box-area{
-padding-bottom:0px;
-}
-
-
-
-/*------------О себе----------*/
-/* Кратко о себе */
 .cv{
 text-align:left;
 padding:20px;
 }
-.skill-set{
-padding-top:100px;
+.mgimo{
+height:300px;
 }
-.resume-h3{
-margin-bottom:20px;
-}
-/*Таймлайн*/
-.box-position{
-justify-content:center;
-padding-left:50px;
+
+
+------
+body {
+    margin-top: 20px;
 }
 .timeline_area {
     position: relative;
@@ -368,6 +366,34 @@ padding-left:50px;
     color: #3f43fd;
 }
 
+
+.fa-box:before{
+padding:0;
+margin:0;
+font-size:20px;
+color:white;
+}
+.box-position{
+justify-content:center;
+padding-left:50px;
+}
+.box-area{
+
+padding-bottom:0px;
+
+}
+
+h6 {
+font-size:15px;
+font-weight:600;
+}
+.dots{
+margin-top:20px;
+}
+.resume-h3{
+margin-bottom:20px;
+}
+
 .time-line-text{
 padding-right:60px;
 padding-bottom:20px;
@@ -375,19 +401,18 @@ padding-bottom:20px;
 .single-timeline-area .bottom::after{
 height:70%;
 }
-.dots{
-margin-top:20px;
+
+
+.skill-set{
+padding-top:100px;
 }
-/* Font Awesome */
-.fa-box:before{
-padding:0;
-margin:0;
-font-size:20px;
-color:white;
-}
-/* !Адаптивность страницы! */
+
+
 @media only screen and (max-width: 590px) {
 .single-timeline-area .timeline-date{
 padding-right:0;
 }
 }
+
+
+
