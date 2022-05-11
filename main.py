@@ -57,9 +57,6 @@ def all_jobs():
 def add_job():
     form = JobForm()
     if form.validate_on_submit():
-        data = request.form.get('achievements')
-        clean_text = re.sub('<[^<]+?>', '', data)
-        print(data)
         new_job = JobPost(
             job_title = form.place.data,
             working_time = form.date.data,
