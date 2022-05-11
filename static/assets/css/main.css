@@ -416,5 +416,12 @@ padding-right:0;
 
 
 .footer-template{
-background-color:black;
+background-color:#222831;
+padding-top:20px;
+}
+.fa-stack {
+color:#00ADB5;
+}
+.HH-ru{
+color:white;
 }
