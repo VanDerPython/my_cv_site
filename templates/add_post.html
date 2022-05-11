@@ -1,0 +1,20 @@
+{% include "header.html"%}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+
+
+        #Load ckeditor
+        {{ ckeditor.load() }}
+
+        #Configure the ckeditor to tell it which field in WTForm will need to be a CKEditor.
+        {{ ckeditor.config(name='achievements',enterMode = ckeditor.ENTER_BR) }}
+
+        #Add WTF quickform
+        {{ wtf.quick_form(form, novalidate=True) }}
+
+
+
+
+
+{% include "footer.html" %}

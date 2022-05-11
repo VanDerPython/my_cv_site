@@ -1,0 +1,14 @@
+{% include "header.html" %}
+<div>
+    {% for post in posts %}
+    <p> {{post.job_title}}</p>
+    {{post.achievements|safe}}
+
+{% endfor %}
+
+
+
+
+</div>
+<a href="{{url_for('add_job')}}" class="button large scrolly">Добавить место работы</a>
+{% include "footer.html" %}
