@@ -35,7 +35,7 @@ class JobPost(db.Model):
     achievements = db.Column(db.String(250),unique = False,nullable = False)
     position = db.Column(db.String(250), unique = False, nullable = False)
 
-# db.create_all()
+db.create_all()
 
 
 @app.route("/")
@@ -47,11 +47,6 @@ def index():
 def home_page():
     return redirect("index")
 
-
-@app.route("/all_jobs", methods = ["GET","POST"])
-def all_jobs():
-    posts =JobPost.query.all()
-    return render_template("all_jobs.html",posts = posts)
 
 @app.route("/add_job", methods = ["GET","POST"])
 def add_job():
@@ -65,11 +60,18 @@ def add_job():
         )
         db.session.add(new_job)
         db.session.commit()
-        return redirect(url_for("all_jobs"))
+        return redirect(url_for("about"))
     return render_template("add_post.html", form=form)
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    posts = JobPost.query.all()
+    return render_template("about.html", posts = posts)
+
+@app.route("/job<int:job_post>")
+def job(job_post):
+    posts = JobPost.query.all()
+    current_post = JobPost.query.get(job_post)
+    return render_template("all_jobs.html",post = current_post)
 if __name__ == "__main__":
     app.run(debug=True)

@@ -379,7 +379,7 @@ padding-left:50px;
 }
 .box-area{
 
-padding-bottom:0px;
+padding-bottom:3%;
 
 }
 
@@ -424,4 +424,16 @@ color:#00ADB5;
 }
 .HH-ru{
 color:white;
+}
+a:link{
+color: black;
+}
+a:visited{
+color:black;
+}
+a:hover{
+color:blue;
+}
+a:active{
+color:blue;
 }

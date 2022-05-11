@@ -57,73 +57,27 @@
     <!-- Timeline Area-->
                         <div class="apland-timeline-area">
         <!-- Single Timeline Content-->
+                            {% for post in posts %}
                             <div class="single-timeline-area">
+
                                 <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="margin-top: 10px;visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                    <p class = "time-line-text">Настоящее время</p>
+                                    <p class = "time-line-text">{{post.working_time}}</p>
                                 </div>
+                                <a href="{{url_for('job',job_post = post.id)}}">
                                     <div class="row box-area" >
                                         <div class="col-lg-12 col-md-12 col-sm-12">
                                             <div class="single-timeline-content d-flex wow fadeInLeft dots" data-wow-delay="0.7s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;visibility: visible;padding: 0px;padding-bottom:10px; margin: 0px;">
                                                 <div class="timeline-icon"><i class="fa fa-address-book fa-box" aria-hidden="true"></i></div>
                                                     <div class="timeline-text col-10">
-                                                    <h6>Министерство инвестиций, промышленности и науки Московской области</h6>
-                                                    <p class = "box-text ">В должности начальника управления промышленной политики</p>
+                                                    <h6>{{post.job_title}}</h6>
+                                                    <p class = "box-text ">{{post.position}}</p>
                                                     </div>
                                             </div>
                                         </div>
                                     </div>
+                                </a>
                             </div>
-        <!-- Single Timeline Content-->
-                            <div class="single-timeline-area box-area">
-                                <div class="timeline-date wow fadeInLeft dots" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                    <p class="time-line-text">2020-2021</p>
-                                </div>
-                                    <div class="row box-area" style="margin-top:50px;">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div class="single-timeline-content d-flex wow fadeInLeft dots" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;visibility: visible;padding: 0px;padding-bottom:30px; margin: 0px;">
-                                                <div class="timeline-icon"><i class="fa fa-briefcase fa-box" aria-hidden="true"></i></div>
-                                                    <div class="timeline-text col-10">
-                                                    <h6>ГБУ "Агентство промышленного развития"</h6>
-                                                    <p class = "box-text">В должности начальника отдела обследования территорий</p>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-              <!-- Single Timeline Content-->
-                            <div class="single-timeline-area box-area">
-                                <div class="timeline-date wow fadeInLeft dots" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                    <p class="time-line-text">2020-2021</p>
-                                </div>
-                                    <div class="row box-area" style="margin-top:50px;">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div class="single-timeline-content d-flex wow fadeInLeft dots" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;visibility: visible;padding: 0px;padding-bottom:30px; margin: 0px;">
-                                                <div class="timeline-icon"><i class="fa fa-briefcase fa-box" aria-hidden="true"></i></div>
-                                                    <div class="timeline-text col-10">
-                                                    <h6>АО "ОЭЗ"Зеленоград"</h6>
-                                                    <p class = "box-text">В должности начальника сектора чего то там</p>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-              <!-- Single Timeline Content-->
-                            <div class="single-timeline-area box-area">
-                                <div class="timeline-date wow fadeInLeft dots" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
-                                    <p class="time-line-text">2020-2021</p>
-                                </div>
-                                    <div class="row box-area" style="margin-top:40px;">
-                                        <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div class="single-timeline-content d-flex wow fadeInLeft dots" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;visibility: visible;padding: 0px;padding-bottom:10px; margin: 0px;">
-                                                <div class="timeline-icon"><i class="fa fa-briefcase fa-box" aria-hidden="true"></i></div>
-                                                    <div class="timeline-text col-10">
-                                                    <h6>ГБУ "Малый бизнес Москвы"</h6>
-                                                    <p class = "box-text">Специалист</p>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
+        {% endfor %}
     <!-- Single Timeline Content-->
                             <div class="single-timeline-area box-area">
                                 <div class="timeline-date wow fadeInLeft dots" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
@@ -165,7 +119,7 @@
                     </div>
 
                 </div>
-<a href="{{url_for('all_jobs')}}" class="button large scrolly">Подробнее об опыте работы</a>
+<a href="{{url_for('add_job')}}" class="button large scrolly">Добавить работу</a>
 </section>
 
 </div>
