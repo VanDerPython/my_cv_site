@@ -1,0 +1,33 @@
+{% include "header.html" %}
+
+			<article id="top" class="wrapper style1">
+				<div class="container">
+					<div class="row">
+						<div class="col-12 col-12-large col-12-medium">
+							<span class="image fit"><img class="homepage-image" src="{{url_for('static', filename = 'images/pic00.jpg')}}" alt="" /></span>
+						</div>
+						<div class="col-12 col-12-large col-12-medium">
+							<header>
+								<h1><strong>{{post.job_title}}</strong>.</h1>
+							</header>
+							<p><strong>Занимаемая должность: </strong>{{post.position}}</p>
+							<p><strong>Срок работы:</strong> {{post.working_time}}</p>
+						</div>
+					</div>
+				</div>
+			</article>
+<div>
+	{% for line in post.achievements.split("<li>") %}
+	<div>
+		<i class="fa fa-id-card" aria-hidden="true"></i>
+	<p>{{line|safe}}</p>
+</div>
+
+	{% endfor %}
+</div>
+<div>
+<a href="{{url_for('edit_job',job_post = post.id)}}" class="button button-portfolio">Редактировать</a>
+</div>
+
+
+{% include "footer.html" %}

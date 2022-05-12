@@ -70,8 +70,26 @@ def about():
 
 @app.route("/job<int:job_post>")
 def job(job_post):
-    posts = JobPost.query.all()
     current_post = JobPost.query.get(job_post)
-    return render_template("all_jobs.html",post = current_post)
+    return render_template("job_info.html",post = current_post)
+
+@app.route("/edit_job/job<int:job_post>",methods=["GET","POST"])
+def edit_job(job_post):
+    post = JobPost.query.get(job_post)
+    edit_job = JobForm(
+            place = post.job_title,
+            date = post.working_time,
+            achievements = post.achievements,
+            position = post.position)
+    if request.method == "POST":
+        post.job_title = edit_job.place.data
+        post.working_time = edit_job.date.data
+        post.achievements = edit_job.achievements.data
+        post.position = edit_job.position.data
+        db.session.commit()
+        return redirect(url_for("job", job_post = job_post))
+    return render_template("add_post.html", form =edit_job, is_edit = True)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
