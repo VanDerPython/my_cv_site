@@ -4,7 +4,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-12 col-12-large col-12-medium">
-							<span class="image fit"><img class="homepage-image" src="{{url_for('static', filename = 'images/pic00.jpg')}}" alt="" /></span>
+							<span class="image fit"><img class="homepage-image" src="https://fgup-ohrana.ru/upload/iblock/b8c/gkdh01cohy5gizr307ch9fr9j7vd7fxu.jpg" alt="" /></span>
 						</div>
 						<div class="col-12 col-12-large col-12-medium">
 							<header>
@@ -17,10 +17,12 @@
 				</div>
 			</article>
 <div>
-	{% for line in post.achievements.split("<li>") %}
+	<h2><strong>Осущественные компетенции:</strong></h2>
+	{% for line in post.achievements.split("<li>")[1:] %}
 	<div>
-		<i class="fa fa-id-card" aria-hidden="true"></i>
-	<p>{{line|safe}}</p>
+		<i class="fa fa-check-square" style = "padding-top:10px;" aria-hidden="true"></i>
+	<p class = "job-info-line">{{line|safe}}</p>
+		<hr>
 </div>
 
 	{% endfor %}

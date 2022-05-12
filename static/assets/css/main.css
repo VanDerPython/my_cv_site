@@ -440,3 +440,16 @@ color:blue;
 .cv-field{
 justify-content:left;
 }
+
+.job-info-line{
+padding-top:10px;
+padding-bottom:10px;
+}
+
+hr {
+    border: 6px dotted #EEEEEE;
+    border-style: none none dotted;
+    color: #fff;
+    background-color: #fff;
+    width:50px;
+}
