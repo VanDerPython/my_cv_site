@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired
+import sqlite3
 import os
 import re
 SECRET_KEY = os.urandom(32)
@@ -24,6 +25,10 @@ Bootstrap(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///jobs.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+#Коррекция базы данных (УДАЛИТЬ)
+# db_correction = sqlite3.connect("jobs.db")
+# cursor = db_correction.cursor()
+# cursor.execute(f"ALTER TABLE job_post ADD COLUMN font_awesome 'string'")
 ckeditor =CKEditor(app)
 app.config["SECRET_KEY"] = SECRET_KEY
 
@@ -35,7 +40,8 @@ class JobPost(db.Model):
     achievements = db.Column(db.String(250),unique = False,nullable = False)
     position = db.Column(db.String(250), unique = False, nullable = False)
 
-db.create_all()
+#db.create_all()
+
 
 
 @app.route("/")
