@@ -22,6 +22,7 @@ class JobForm(FlaskForm):
 
 class BlogForm(FlaskForm):
     post_title = StringField("Заголовок", validators=[DataRequired()])
+    post_subtitle = StringField("Подзаголовок", validators=[DataRequired()])
     author = StringField("Автор", validators=[DataRequired()])
     topic = StringField("Тема публикации", validators=[DataRequired()])
     body = CKEditorField("Пост", validators=[DataRequired()])
@@ -48,11 +49,12 @@ class JobPost(db.Model):
     job_title = db.Column(db.String(250),unique=False,nullable=False)
     working_time = db.Column(db.String(250), unique = False, nullable = False)
     achievements = db.Column(db.String(250),unique = False,nullable = False)
-    position = db.Column(db.String(250), unique = False, nullable = False)
+    position = db.Column(db.String(6000), unique = False, nullable = False)
 
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     post_title = db.Column(db.String(250), unique = True, nullable = False)
+    post_subtitle = db.Column(db.String(250), unique = True, nullable = False)
     author = db.Column(db.String(250), unique = False,nullable = False)
     date = db.Column(db.String(250), unique = False, nullable = False)
     topic = db.Column(db.String(250), unique = False, nullable = False)
@@ -127,6 +129,7 @@ def add_post():
     if request.method == "POST":
         new_post = BlogPost(
         post_title=form.post_title.data,
+        post_subtitle = form.post_subtitle.data,
         author = form.author.data,
         date = dt.datetime.now().strftime("%d.%m.%Y"),
         topic = form.topic.data,
@@ -137,18 +140,25 @@ def add_post():
         return redirect(url_for('blog'))
     return render_template("add_post.html", form = form)
 
+@app.route("/post<post_number>")
+def read_post(post_number):
+    selected_post = BlogPost.query.get(post_number)
+    return render_template("post.html", post = selected_post)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
 #TODO 1. Сделать раздел блога
 #TODO 1.1 Сделать верстку блога
 #Todo 1.1.1 Сделать CSS блога
-#TODO 1.2. Создать таблицу данных для блога
+#TODO 1.2. Добавить подзаголовок в таблицу
 #TODO 1.3 Создать путь для блога, логику для блога
 #Todo 1.3.1 Блог должен принимать информацию от админа, форматировать ее и ставить на страницу как пост
-#Todo 1.3.2. Логика - через втформу
 #Todo 1.3.3. Доступ - только зарегистрированным и авторизованным пользователям, иначе - уведомление о необходимости регистрации
 #Todo 1.4 Добавить изображения
+#Todo 1.5 Сделать страницу поста
+#Todo 1.5.1 Сделать верстку страницы поста
+#Todo 1.5.2 Сделать возможность редактирования поста
 
 #Todo 2 Сделать регистрацию
 #Todo 2.1 Сделать интерфейс регистрации
@@ -164,6 +174,7 @@ if __name__ == "__main__":
 #Todo 4.1 Баг с отображением таймлайна(есть прерывистые линии)
 #Todo 4.2 Баг с черным текстом на синей кнопке
 # Todo 4.3 Сделать ссылку на лого VanDerPython
+#Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
 
 #Todo 5. Защитить правами админа разделы с кнопками для админа (блог и опыт работы)
 
@@ -210,3 +221,5 @@ if __name__ == "__main__":
 #Todo 16.1 Сделать сортировку по теме технологий
 
 #Todo 17 сделать файловую систему
+
+#Todo 18 Уменьшить размер значков футера
