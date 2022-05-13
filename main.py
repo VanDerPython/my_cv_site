@@ -2,10 +2,11 @@ from flask import Flask,render_template, redirect, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, FileField
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired
 import sqlite3
+import datetime as dt
 import os
 import re
 SECRET_KEY = os.urandom(32)
@@ -17,7 +18,16 @@ class JobForm(FlaskForm):
     date = StringField("Срок работы", validators=[DataRequired()])
     position = StringField("Должность",validators=[DataRequired()], )
     achievements = CKEditorField("Осуществленные компетенции", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Подтвердить")
+
+class BlogForm(FlaskForm):
+    post_title = StringField("Заголовок", validators=[DataRequired()])
+    author = StringField("Автор", validators=[DataRequired()])
+    topic = StringField("Тема публикации", validators=[DataRequired()])
+    body = CKEditorField("Пост", validators=[DataRequired()])
+    submit = SubmitField("Подтвердить")
+
+
 app = Flask(__name__)
 Bootstrap(app)
 
@@ -40,7 +50,16 @@ class JobPost(db.Model):
     achievements = db.Column(db.String(250),unique = False,nullable = False)
     position = db.Column(db.String(250), unique = False, nullable = False)
 
-#db.create_all()
+class BlogPost(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    post_title = db.Column(db.String(250), unique = True, nullable = False)
+    author = db.Column(db.String(250), unique = False,nullable = False)
+    date = db.Column(db.String(250), unique = False, nullable = False)
+    topic = db.Column(db.String(250), unique = False, nullable = False)
+    body = db.Column(db.String(250), unique = True, nullable = False)
+
+
+db.create_all()
 
 
 
@@ -67,7 +86,7 @@ def add_job():
         db.session.add(new_job)
         db.session.commit()
         return redirect(url_for("about"))
-    return render_template("add_post.html", form=form)
+    return render_template("add_job.html", form=form)
 
 @app.route("/about")
 def about():
@@ -94,8 +113,100 @@ def edit_job(job_post):
         post.position = edit_job.position.data
         db.session.commit()
         return redirect(url_for("job", job_post = job_post))
-    return render_template("add_post.html", form =edit_job, is_edit = True)
+    return render_template("add_job.html", form =edit_job, is_edit = True)
 
+
+@app.route("/blog")
+def blog():
+    all_posts = BlogPost.query.all()
+    return render_template("programmer_blog.html",posts = all_posts)
+
+@app.route("/add_post", methods = ["GET", "POST"])
+def add_post():
+    form = BlogForm()
+    if request.method == "POST":
+        new_post = BlogPost(
+        post_title=form.post_title.data,
+        author = form.author.data,
+        date = dt.datetime.now().strftime("%d.%m.%Y"),
+        topic = form.topic.data,
+        body = form.body.data,
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('blog'))
+    return render_template("add_post.html", form = form)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+#TODO 1. Сделать раздел блога
+#TODO 1.1 Сделать верстку блога
+#Todo 1.1.1 Сделать CSS блога
+#TODO 1.2. Создать таблицу данных для блога
+#TODO 1.3 Создать путь для блога, логику для блога
+#Todo 1.3.1 Блог должен принимать информацию от админа, форматировать ее и ставить на страницу как пост
+#Todo 1.3.2. Логика - через втформу
+#Todo 1.3.3. Доступ - только зарегистрированным и авторизованным пользователям, иначе - уведомление о необходимости регистрации
+#Todo 1.4 Добавить изображения
+
+#Todo 2 Сделать регистрацию
+#Todo 2.1 Сделать интерфейс регистрации
+#Todo 2.2. Сделать таблицу пользователей
+#Todo 2.3 Сделать функционал для зарегистрированных пользователей
+#Todo 2.3.1 Основной функционал - просмотр блога
+
+#Todo 3 Сделать рефактор кода
+#TOdo 3.1. Сделать рефактор КСС
+#Todo 3.2. Сделать рефактор темплейтов, проверить существующие классы на их наличие в КСС
+
+#Todo 4. Исправить баги
+#Todo 4.1 Баг с отображением таймлайна(есть прерывистые линии)
+#Todo 4.2 Баг с черным текстом на синей кнопке
+# Todo 4.3 Сделать ссылку на лого VanDerPython
+
+#Todo 5. Защитить правами админа разделы с кнопками для админа (блог и опыт работы)
+
+# Todo 6. Сделать портфолио
+# Todo 6.1 Сделать раздел портфолио
+# Todo 6.2 Сделать верстку портфолио (вероятный дизайн - две колонки, внизу отдельный див с информацией об обучающих мини-проектах)
+# Todo 6.3 сделать ссылки на ГитХаб или Репл.ит с примерами кода соответтсвующих проектов
+#Todo 6.4 Прикрипить примеры работы на карусель на основной странице
+
+# Todo 7. Поставить на сервер
+
+#Todo 8 . Решить вопрос с дизайном, подумать что можно исправить и добавить
+#Todo 8.1 Цвета
+# Todo 8.2 Верстка
+# Todo 8.3 Оформление картинками на бэкграунд
+# Todo 8.4 Осмотреть шрифты на предмет их кореляции, отсутствии прыжков
+# Todo 8.5 Подумать над использованием другого шрифта, привести шрифт к единообразию
+
+#Todo 9. Решить вопрос защиты данных, подумать над защитой от атак
+
+#Todo 10. Страница, посвященная стеку технологий
+# Todo 10.1. Краткое описание технологии, мой уровень владения ей, чем полезна
+# Todo 10.2 Для основых и второстепенных технооогий
+
+#Todo 11. Поработать над основным заполенинем сайта
+#Todo 11.1 Убрать все заглушки и поставить нормальную, действующую информацию
+
+# Todo 12 Убрать информацию об образовании в серую часть на странице о себе
+
+#Todo 13 Создать див на странице о себе, посвященный пройденным курсам и прочитанным книгам
+
+#Todo 14 Сделать раздел "Контакты"
+#Todo 14.1 продублировать форму для обратной связи
+#Todo 14.2. Основные данные о своих контактах
+#Todo 14.3 Подумать, нужен ли он вообще
+
+#Todo 15 Сделать титулную страницу
+#Todo 15.1 Офомление титульной страница
+#Todo 15.2 Кнопка контактов
+#Todo 15.3 Кнопка  исследовать сайт
+#Todo 15.4 Кнопка - мои работы??
+
+#Todo 16 Сделать реляционное взаимодействие баз
+#Todo 16.1 Сделать сортировку по теме технологий
+
+#Todo 17 сделать файловую систему

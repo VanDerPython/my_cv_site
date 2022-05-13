@@ -1,0 +1,25 @@
+{% include "header.html" %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {% for post in posts %}
+            <div>
+                <a href="#">
+                    <h2>
+                        {{post.post_title}}
+                    </h2>
+                    <h3>
+                        {{post.body|safe}}
+                    </h3>
+                </a>
+                <p>Posted by {{post.author}} on {{post.date}}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+<a href="{{url_for('add_post')}}" class="button large scrolly">Добавить пост</a>
+
+{% include "footer.html" %}
