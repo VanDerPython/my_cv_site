@@ -6,10 +6,10 @@
             {% for post in posts %}
             <div>
                 <a href="{{url_for('read_post',post_number = post.id)}}">
-                    <h2 style="text-align:left;">
+                    <h2 style="text-align:center;">
                         {{post.post_title}}
                     </h2>
-                    <h3 style="text-align:justify;">
+                    <h3 style="text-align:left;" style="text-align:justify;">
                         {{post.post_subtitle}}
                     </h3>
                 </a>

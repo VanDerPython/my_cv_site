@@ -453,3 +453,7 @@ hr {
     background-color: #fff;
     width:50px;
 }
+
+ul {
+    list-style-type: none;
+}
