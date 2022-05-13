@@ -1,4 +1,4 @@
-from flask import Flask,render_template, redirect, request, url_for
+from flask import Flask,render_template, redirect, request, url_for,abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -6,12 +6,20 @@ from wtforms import StringField, SubmitField, FileField
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired
 import sqlite3
+from flask_login import UserMixin,login_user,LoginManager,login_required,current_user,logout_user
+from functools import wraps
+from werkzeug.security import  generate_password_hash, check_password_hash
 import datetime as dt
 import os
 import re
 SECRET_KEY = os.urandom(32)
-
-
+# def admin_only(f):
+#     @wraps(f)
+#     def decorated_function(*args,**kwargs):
+#         if not current_user.is_authenticated or current_user.id !=1:
+#             return abort(403)
+#         return f(*args,**kwargs)
+#     return decorated_function()
 # Forms
 class JobForm(FlaskForm):
     place = StringField("Место работы", validators=[DataRequired()])
@@ -23,9 +31,21 @@ class JobForm(FlaskForm):
 class BlogForm(FlaskForm):
     post_title = StringField("Заголовок", validators=[DataRequired()])
     post_subtitle = StringField("Подзаголовок", validators=[DataRequired()])
+    post_image = FileField("Картинка заголовка")
     author = StringField("Автор", validators=[DataRequired()])
     topic = StringField("Тема публикации", validators=[DataRequired()])
     body = CKEditorField("Пост", validators=[DataRequired()])
+    submit = SubmitField("Подтвердить")
+
+class RegisterForm(FlaskForm):
+    name = StringField("Никнейм",validators=[DataRequired()])
+    email = StringField("Адрес эл.почты", validators=[DataRequired()])
+    password = StringField("Пароль",validators=[DataRequired()])
+    submit = SubmitField("Подтвердить")
+
+class LoginForm(FlaskForm):
+    email = StringField("Адрес эл.почты", validators=[DataRequired()])
+    password = StringField("Пароль",validators=[DataRequired()])
     submit = SubmitField("Подтвердить")
 
 
@@ -36,6 +56,8 @@ Bootstrap(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///jobs.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 #Коррекция базы данных (УДАЛИТЬ)
 # db_correction = sqlite3.connect("jobs.db")
 # cursor = db_correction.cursor()
@@ -43,6 +65,9 @@ db = SQLAlchemy(app)
 ckeditor =CKEditor(app)
 app.config["SECRET_KEY"] = SECRET_KEY
 
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
 #DB TABLE
 class JobPost(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -60,8 +85,13 @@ class BlogPost(db.Model):
     topic = db.Column(db.String(250), unique = False, nullable = False)
     body = db.Column(db.String(250), unique = True, nullable = False)
 
+class Users(UserMixin, db.Model):
+    id = db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String(250), unique = False, nullable = False)
+    email = db.Column(db.String(250), unique = False, nullable = False)
+    password = db.Column(db.String(250), unique = False, nullable = False)
 
-db.create_all()
+# db.create_all()
 
 
 
@@ -74,8 +104,46 @@ def index():
 def home_page():
     return redirect("index")
 
+@app.route("/register",methods=["GET","POST"])
+def register():
+    form = RegisterForm()
+    if request.method == "POST":
+        hash_and_salted_password = generate_password_hash(
+            request.form.get("password"),
+            method = "pbkdf2:sha256",
+            salt_length=8
+        )
+        new_user = Users(
+            name = form.name.data,
+            email = form.email.data,
+            password = hash_and_salted_password
+
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template("register.html", form=form)
+
+@app.route("/login", methods = ["GET","POST"])
+def login():
+    form = LoginForm()
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user = Users.query.filter_by(email = email).first()
+        if check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for("index"))
+    return render_template("login.html", form = form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route("/add_job", methods = ["GET","POST"])
+# @admin_only
 def add_job():
     form = JobForm()
     if form.validate_on_submit():
@@ -101,6 +169,7 @@ def job(job_post):
     return render_template("job_info.html",post = current_post)
 
 @app.route("/edit_job/job<int:job_post>",methods=["GET","POST"])
+# @admin_only
 def edit_job(job_post):
     post = JobPost.query.get(job_post)
     edit_job = JobForm(
@@ -119,11 +188,13 @@ def edit_job(job_post):
 
 
 @app.route("/blog")
+@login_required
 def blog():
     all_posts = BlogPost.query.all()
     return render_template("programmer_blog.html",posts = all_posts)
 
 @app.route("/add_post", methods = ["GET", "POST"])
+# @admin_only
 def add_post():
     form = BlogForm()
     if request.method == "POST":
@@ -154,15 +225,12 @@ if __name__ == "__main__":
 #TODO 1.2. Добавить подзаголовок в таблицу
 #TODO 1.3 Создать путь для блога, логику для блога
 #Todo 1.3.1 Блог должен принимать информацию от админа, форматировать ее и ставить на страницу как пост
-#Todo 1.3.3. Доступ - только зарегистрированным и авторизованным пользователям, иначе - уведомление о необходимости регистрации
 #Todo 1.4 Добавить изображения
 #Todo 1.5.2 Сделать возможность редактирования поста
 
 #Todo 2 Сделать регистрацию
 #Todo 2.1 Сделать интерфейс регистрации
 #Todo 2.2. Сделать таблицу пользователей
-#Todo 2.3 Сделать функционал для зарегистрированных пользователей
-#Todo 2.3.1 Основной функционал - просмотр блога
 
 #Todo 3 Сделать рефактор кода
 #TOdo 3.1. Сделать рефактор КСС
