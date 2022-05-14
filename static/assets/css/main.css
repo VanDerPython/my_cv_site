@@ -112,6 +112,7 @@ box-shadow: 0 0 12px rgb(63, 63, 63);
 }
 .row{
 justify-content:center;
+
 }
 /*Font Awesome */
 .fa:before{
@@ -237,6 +238,7 @@ margin:0;
 .cv{
 text-align:left;
 padding:20px;
+padding-bottom:100px;
 }
 .mgimo{
 height:300px;
@@ -288,7 +290,7 @@ body {
 .single-timeline-area .timeline-date::after {
     position: absolute;
     width: 3px;
-    height: 200%;
+    height: 100%;
     content: "";
     background-color: #ebebeb;
     top: 0;
@@ -456,4 +458,10 @@ hr {
 
 ul {
     list-style-type: none;
+}
+
+.education {
+font-size:14px;
+line-height:1.5rem;
+text-align:left;
 }
