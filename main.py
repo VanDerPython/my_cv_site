@@ -95,13 +95,13 @@ class Users(UserMixin, db.Model):
 
 
 @app.route("/")
-def index():
-    return render_template("index.html",is_loggedin = current_user.is_authenticated)
+def start():
+    return render_template("starting_page.html")
 
 
 @app.route("/index")
-def home_page():
-    return redirect("index")
+def index():
+    return render_template("index.html",is_loggedin = current_user.is_authenticated)
 
 @app.route("/register",methods=["GET","POST"])
 def register():
@@ -294,10 +294,7 @@ if __name__ == "__main__":
 #Todo 13 Создать див на странице о себе, посвященный пройденным курсам и прочитанным книгам
 
 
-#Todo 15 Сделать титулную страницу
 #Todo 15.1 Офомление титульной страница
-#Todo 15.2 Кнопка контактов
-#Todo 15.3 Кнопка  исследовать сайт
 #Todo 15.4 Кнопка - мои работы??
 
 #Todo 16 Сделать реляционное взаимодействие баз

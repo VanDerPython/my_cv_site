@@ -74,6 +74,7 @@ margin-left:auto;
 margin-right:auto;
 position:relative;
 margin-top:20px;
+margin-bottom:10px;
 }
 /* Верхний блок*/
 #top {
@@ -469,4 +470,34 @@ text-align:left;
 
 .contacts-p{
 font-size:15px;
+}
+
+.starting-page{
+margin-top:17%;
+margin-bottom:17%
+
+}
+.starting-card{
+width: auto;
+height: 200px;
+margin:30px;
+margin-top:25%;
+border-radius:12px;
+background-color: #EEEEEE;
+box-shadow: 0 0 12px rgb(63, 63, 63);
+flex:auto;
+}
+.starting-image{
+display:block;
+clip-path: circle();
+width:350px;
+ border:20px solid white;
+    border-radius: 500px;
+height:auto;
+text-align:center;
+margin-left:auto;
+margin-right:auto;
+position:relative;
+margin-top:20px;
+margin-bottom:10px;
 }
