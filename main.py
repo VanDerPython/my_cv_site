@@ -218,6 +218,10 @@ def read_post(post_number):
     selected_post = BlogPost.query.get(post_number)
     return render_template("post.html", post = selected_post,is_loggedin = current_user.is_authenticated)
 
+@app.route("/contacts")
+def contacts():
+    return render_template("contacts.html", is_loggedin = current_user.is_authenticated)
+
 @app.route("/edit_post/post<int:post_number>", methods=["GET","POST"])
 @admin_only
 def edit_post(post_number):
@@ -289,10 +293,6 @@ if __name__ == "__main__":
 
 #Todo 13 Создать див на странице о себе, посвященный пройденным курсам и прочитанным книгам
 
-#Todo 14 Сделать раздел "Контакты"
-#Todo 14.1 продублировать форму для обратной связи
-#Todo 14.2. Основные данные о своих контактах
-#Todo 14.3 Подумать, нужен ли он вообще
 
 #Todo 15 Сделать титулную страницу
 #Todo 15.1 Офомление титульной страница

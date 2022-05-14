@@ -29,7 +29,7 @@
       <a class="nav-item nav-link " href="{{url_for('index')}}">Домой <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="{{url_for('about')}}">О себе</a>
       <a class="nav-item nav-link" href="#">Портфолио</a>
-      <a class="nav-item nav-link" href="#">Контакты</a>
+      <a class="nav-item nav-link" href="{{url_for('contacts')}}">Контакты</a>
         <a class="nav-item nav-link" href="{{url_for('blog')}}">Путь программиста</a>
         {%if not is_loggedin%}
         <a class="nav-item nav-link" style="" href="{{url_for('login')}}">Войти</a>
