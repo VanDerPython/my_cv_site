@@ -430,9 +430,12 @@ color:#00ADB5;
 color:white;
 }
 a:link{
-color: black;
+
 }
-a:visited{
+a{
+color:inherit;
+}
+anchor-black:visited{
 color:black;
 }
 a:hover{

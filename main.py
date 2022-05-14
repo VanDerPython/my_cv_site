@@ -2,7 +2,7 @@ from flask import Flask,render_template, redirect, request, url_for,abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FileField
+from wtforms import StringField, SubmitField, FileField, PasswordField
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired
 import sqlite3
@@ -44,7 +44,7 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField("Адрес эл.почты", validators=[DataRequired()])
-    password = StringField("Пароль",validators=[DataRequired()])
+    password = PasswordField("Пароль",validators=[DataRequired()])
     submit = SubmitField("Подтвердить")
 
 
@@ -248,7 +248,6 @@ if __name__ == "__main__":
 #TODO 1.1 Сделать верстку блога
 #Todo 1.1.1 Сделать CSS блога
 #Todo 1.4 Добавить изображения
-#Todo 1.5.2 Сделать возможность редактирования поста
 
 # TODO 2 сделать верстку понятной, что ты залогинился или нет
 
@@ -257,12 +256,11 @@ if __name__ == "__main__":
 #Todo 3.2. Сделать рефактор темплейтов, проверить существующие классы на их наличие в КСС
 
 #Todo 4. Исправить баги
-#Todo 4.1 Баг с отображением таймлайна(есть прерывистые линии)
-#Todo 4.2 Баг с черным текстом на синей кнопке
-# Todo 4.3 Сделать ссылку на лого VanDerPython
+#Todo 4.2 Баг с черным текстом на синей кнопке - исправлено
+# Todo 4.3 Сделать ссылку на лого VanDerPython - сделано
 #Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
-#Todo 4.5 Почему то необходим повторный логин
-#Todo 4.6 Зазвездить пароль
+#Todo 4.5 Почему то необходим повторный логин - исправлено
+#Todo 4.6 Зазвездить пароль - исправлено
 
 #Todo 5. Защитить правами админа разделы с кнопками для админа (блог и опыт работы)
 
