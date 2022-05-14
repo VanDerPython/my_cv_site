@@ -13,13 +13,13 @@ import datetime as dt
 import os
 import re
 SECRET_KEY = os.urandom(32)
-# def admin_only(f):
-#     @wraps(f)
-#     def decorated_function(*args,**kwargs):
-#         if not current_user.is_authenticated or current_user.id !=1:
-#             return abort(403)
-#         return f(*args,**kwargs)
-#     return decorated_function()
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args,**kwargs):
+        if current_user.id !=1:
+            return abort(403)
+        return f(*args,**kwargs)
+    return decorated_function
 # Forms
 class JobForm(FlaskForm):
     place = StringField("Место работы", validators=[DataRequired()])
@@ -31,7 +31,6 @@ class JobForm(FlaskForm):
 class BlogForm(FlaskForm):
     post_title = StringField("Заголовок", validators=[DataRequired()])
     post_subtitle = StringField("Подзаголовок", validators=[DataRequired()])
-    post_image = FileField("Картинка заголовка")
     author = StringField("Автор", validators=[DataRequired()])
     topic = StringField("Тема публикации", validators=[DataRequired()])
     body = CKEditorField("Пост", validators=[DataRequired()])
@@ -97,7 +96,7 @@ class Users(UserMixin, db.Model):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html",is_loggedin = current_user.is_authenticated)
 
 
 @app.route("/index")
@@ -121,8 +120,9 @@ def register():
         )
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('index'))
-    return render_template("register.html", form=form)
+        login_user(new_user)
+        return redirect(url_for('blog'))
+    return render_template("register.html", form=form,is_loggedin = current_user.is_authenticated)
 
 @app.route("/login", methods = ["GET","POST"])
 def login():
@@ -134,7 +134,7 @@ def login():
         if check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for("index"))
-    return render_template("login.html", form = form)
+    return render_template("login.html", form = form,is_loggedin = current_user.is_authenticated)
 
 
 @app.route('/logout')
@@ -143,7 +143,7 @@ def logout():
     return redirect(url_for('index'))
 
 @app.route("/add_job", methods = ["GET","POST"])
-# @admin_only
+@admin_only
 def add_job():
     form = JobForm()
     if form.validate_on_submit():
@@ -156,20 +156,20 @@ def add_job():
         db.session.add(new_job)
         db.session.commit()
         return redirect(url_for("about"))
-    return render_template("add_job.html", form=form)
+    return render_template("add_job.html", form=form, current_user=current_user,is_loggedin = current_user.is_authenticated)
 
 @app.route("/about")
 def about():
     posts = JobPost.query.all()
-    return render_template("about.html", posts = posts)
+    return render_template("about.html", posts = posts,is_loggedin = current_user.is_authenticated)
 
 @app.route("/job<int:job_post>")
 def job(job_post):
     current_post = JobPost.query.get(job_post)
-    return render_template("job_info.html",post = current_post)
+    return render_template("job_info.html",post = current_post,is_loggedin = current_user.is_authenticated)
 
 @app.route("/edit_job/job<int:job_post>",methods=["GET","POST"])
-# @admin_only
+@admin_only
 def edit_job(job_post):
     post = JobPost.query.get(job_post)
     edit_job = JobForm(
@@ -184,17 +184,19 @@ def edit_job(job_post):
         post.position = edit_job.position.data
         db.session.commit()
         return redirect(url_for("job", job_post = job_post))
-    return render_template("add_job.html", form =edit_job, is_edit = True)
+    return render_template("add_job.html", form =edit_job, is_edit = True, current_user=current_user,is_loggedin = current_user.is_authenticated)
 
 
 @app.route("/blog")
-@login_required
 def blog():
     all_posts = BlogPost.query.all()
-    return render_template("programmer_blog.html",posts = all_posts)
+    if current_user.is_authenticated:
+        return render_template("programmer_blog.html",posts = all_posts, is_loggedin = True)
+    return render_template("programmer_blog.html", is_loggedin = False )
+
 
 @app.route("/add_post", methods = ["GET", "POST"])
-# @admin_only
+@admin_only
 def add_post():
     form = BlogForm()
     if request.method == "POST":
@@ -209,28 +211,42 @@ def add_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for('blog'))
-    return render_template("add_post.html", form = form)
+    return render_template("add_post.html", form = form, current_user = current_user,is_loggedin = current_user.is_authenticated)
 
 @app.route("/post<post_number>")
 def read_post(post_number):
     selected_post = BlogPost.query.get(post_number)
-    return render_template("post.html", post = selected_post)
+    return render_template("post.html", post = selected_post,is_loggedin = current_user.is_authenticated)
 
+@app.route("/edit_post/post<int:post_number>", methods=["GET","POST"])
+@admin_only
+def edit_post(post_number):
+    post = BlogPost.query.get(post_number)
+    edit_post = BlogForm(
+    post_title=post.post_title,
+    post_subtitle = post.post_subtitle,
+    author = post.author,
+    topic = post.topic,
+    body = post.body)
+    if request.method == "POST":
+        post.post_title = edit_post.post_title.data
+        post.post_subtitle = edit_post.post_subtitle.data
+        post.author = edit_post.author.data
+        post.topic = edit_post.topic.data
+        post.body = edit_post.body.data
+        db.session.commit()
+        return redirect(url_for('blog', blog_post=post_number))
+    return render_template("add_post.html", form = edit_post, current_user = current_user)
 if __name__ == "__main__":
     app.run(debug=True)
 
 #TODO 1. Сделать раздел блога
 #TODO 1.1 Сделать верстку блога
 #Todo 1.1.1 Сделать CSS блога
-#TODO 1.2. Добавить подзаголовок в таблицу
-#TODO 1.3 Создать путь для блога, логику для блога
-#Todo 1.3.1 Блог должен принимать информацию от админа, форматировать ее и ставить на страницу как пост
 #Todo 1.4 Добавить изображения
 #Todo 1.5.2 Сделать возможность редактирования поста
 
-#Todo 2 Сделать регистрацию
-#Todo 2.1 Сделать интерфейс регистрации
-#Todo 2.2. Сделать таблицу пользователей
+# TODO 2 сделать верстку понятной, что ты залогинился или нет
 
 #Todo 3 Сделать рефактор кода
 #TOdo 3.1. Сделать рефактор КСС
@@ -241,6 +257,8 @@ if __name__ == "__main__":
 #Todo 4.2 Баг с черным текстом на синей кнопке
 # Todo 4.3 Сделать ссылку на лого VanDerPython
 #Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
+#Todo 4.5 Почему то необходим повторный логин
+#Todo 4.6 Зазвездить пароль
 
 #Todo 5. Защитить правами админа разделы с кнопками для админа (блог и опыт работы)
 
@@ -289,3 +307,5 @@ if __name__ == "__main__":
 #Todo 17 сделать файловую систему
 
 #Todo 18 Уменьшить размер значков футера
+
+#Todo 19 Сделать высвечивание флешек при действиях логина и пр.
