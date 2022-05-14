@@ -78,8 +78,22 @@ margin-bottom:10px;
 }
 /* Верхний блок*/
 #top {
-background-color:#EEEEEE;
-justify-content: left;
+position:relative;
+}
+
+#top:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-image: url("https://catherineasquithgallery.com/uploads/posts/2021-02/1612501279_57-p-serii-fon-s-pyatnami-88.jpg");
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
 }
 header {
 padding-bottom:30px;
@@ -89,7 +103,7 @@ padding-bottom:30px;
 #work {
 color:#EEEEEE;
 font-weight:900;
-background-color:#00ADB5;
+background-color:#3f8dba;
 }
 
 .card-container {
@@ -119,13 +133,13 @@ justify-content:center;
 /*Font Awesome */
 .fa:before{
 font-size:28px;
-color:#00ADB5;
+color:#3f8dba;
 margin:20px 25px 50px;
 }
 
 /*Кнопки */
 .button {
-background-color:#00ADB5;
+background-color:#3f8dba;
 border:none;
 color:#EEEEEE;
 padding:10px 16px;
@@ -304,7 +318,7 @@ body {
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    background-color: #00ADB5;
+    background-color: #3f8dba;
     content: "";
     top: 50%;
     right: 170px;
@@ -339,7 +353,7 @@ body {
     transition-duration: 500ms;
     width: 30px;
     height: 30px;
-    background-color: #00ADB5;
+    background-color: #3f8dba;
     -webkit-box-flex: 0;
     -ms-flex: 0 0 30px;
     flex: 0 0 30px;
@@ -424,7 +438,7 @@ background-color:#222831;
 padding-top:20px;
 }
 .fa-stack {
-color:#00ADB5;
+color:#3f8dba;
 }
 .HH-ru{
 color:white;
@@ -476,20 +490,22 @@ font-size:15px;
 }
 
 .starting-page{
-margin-top:17%;
-margin-bottom:17%
+margin-top:200px;
+margin-bottom:200px;
+padding-bottom:200px;
 
 }
 .starting-card{
 width: auto;
 height: 200px;
 margin:30px;
-margin-top:25%;
+margin-top:300px;
 border-radius:12px;
 background-color: #EEEEEE;
 box-shadow: 0 0 12px rgb(63, 63, 63);
 flex:auto;
 }
+
 .starting-image{
 display:block;
 clip-path: circle();
@@ -503,4 +519,28 @@ margin-right:auto;
 position:relative;
 margin-top:20px;
 margin-bottom:10px;
+}
+@media only screen and (max-width: 768px){
+.starting-page{
+margin:0;
+}
+.starting-image{
+margin-top:170px;
+margin-bottom:0;
+width:200px;
+}
+.starting-card{
+margin-top:100px;
+margin-bottom:0;
+font-size:10px;
+height:20px;
+}
+h1{
+font-size:15px;
+}
+
+}
+
+.h2-education{
+text-align:center;
 }

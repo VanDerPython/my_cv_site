@@ -31,12 +31,17 @@
       <a class="nav-item nav-link" href="#">Портфолио</a>
       <a class="nav-item nav-link" href="{{url_for('contacts')}}">Контакты</a>
         <a class="nav-item nav-link" href="{{url_for('blog')}}">Путь программиста</a>
+        </div>
         {%if not is_loggedin%}
+      <div class="navbar-nav ml-auto">
         <a class="nav-item nav-link" style="" href="{{url_for('login')}}">Войти</a>
         <a class ="nav-item nav-link" href="{{url_for('register')}}">Регистрация</a>
+          </div>
         {% elif is_loggedin %}
+      <div class="navbar-nav ml-auto">
         <a class ="nav-item nav-link" href="{{url_for('logout')}}">Выйти</a>
-        {% endif %}
+        </div>
+          {% endif %}
     </div>
   </div>
 </nav>
