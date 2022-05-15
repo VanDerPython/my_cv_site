@@ -1,0 +1,31 @@
+{% include "header.html" %}
+
+			<article id="top" class="wrapper style1">
+				<div class="container">
+					<div class="row">
+						<div class="col-12 col-12-large col-12-medium">
+							<span class="image fit"><img style="width:200px;" src="https://fgup-ohrana.ru/upload/iblock/b8c/gkdh01cohy5gizr307ch9fr9j7vd7fxu.jpg" alt="" /></span>
+						</div>
+						<div class="col-12 col-12-large col-12-medium">
+								<h2>{{post.project_name}}</h2>
+
+
+						</div>
+					</div>
+				</div>
+			</article>
+<div class="" style="text-align:left;">
+	<div class="container col-8" style="justify-content:center; padding-top:20px;">
+		{{post.project_body|safe}}
+		<h5><strong>Стек технологий</strong> {{post.tech_name}} </h5>
+						<h5><strong>Назначение проекта</strong> {{post.project_aim}}}</h5>
+	</div>
+
+
+</div>
+<div>
+<a href="{{url_for('portfolio_edit',case = post.id)}}" class="button button-portfolio">Редактировать</a>
+</div>
+
+
+{% include "footer.html" %}

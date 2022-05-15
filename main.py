@@ -305,6 +305,30 @@ def add_portfolio_case():
         return redirect("portfolio")
     return render_template("add_portfolio.html", form=form)
 
+@app.route("/portfolio/case<int:case>")
+def portfolio_case(case):
+    selected_case = Portfolio.query.get(case)
+    return render_template("portfolio_case.html", post = selected_case)
+
+@app.route("/portfolio/edit_case<int:case>", methods = ["GET","POST"])
+def portfolio_edit(case):
+    case = Portfolio.query.get(case)
+    edit_case = PortfolioForm(
+        project_name=case.project_name,
+        tech_name=case.tech_name,
+        project_aim=case.project_aim,
+        project_body=case.project_body,
+        repositary_link=case.repositary_link)
+    if request.method == "POST":
+        case.project_name = edit_case.project_name.data
+        case.tech_name = edit_case.tech_name.data
+        case.project_aim = edit_case.project_aim.data
+        case.project_body = edit_case.project_body.data
+        case.repositary_link = edit_case.repositary_link.data
+        db.session.commit()
+        return redirect(url_for('portfolio'))
+    return render_template("add_portfolio.html", form=edit_case, current_user=current_user)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
@@ -322,9 +346,9 @@ if __name__ == "__main__":
 #Todo 4. Исправить баги
 #Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
 
+# Todo 5 - Пересмотреть кнопки, сделать недоступными для простых пользователей те кнопки, которые должны быть у админа
 
 # Todo 6. Сделать портфолио
-# Todo 6.1 Сделать раздел портфолио - сделано
 # Todo 6.2 Сделать верстку портфолио (вероятный дизайн - две колонки, внизу отдельный див с информацией об обучающих мини-проектах)
 # Todo 6.3 сделать ссылки на ГитХаб или Репл.ит с примерами кода соответтсвующих проектов
 #Todo 6.4 Прикрепить примеры работы на карусель на основной странице

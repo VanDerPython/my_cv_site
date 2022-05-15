@@ -4,7 +4,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             {% for post in posts %}
             <div>
-                <a href="{{url_for('read_post',post_number = post.id)}}">
+                <a href="{{url_for('portfolio_case',case = post.id)}}">
                     <h2 style="text-align:center;">
                         {{post.project_name}}
                     </h2>
