@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect, request, url_for, abort
+from flask import Flask, render_template, redirect, request, url_for, abort, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FileField, PasswordField
+from wtforms import StringField, SubmitField, FileField, PasswordField, SelectField
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired
 import sqlite3
@@ -55,6 +55,13 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Подтвердить")
 
 
+class PortfolioForm(FlaskForm):
+    project_name = StringField("Название проекта", validators=[DataRequired()])
+    tech_name = StringField("Стек примененных технологий", validators=[DataRequired()])
+    project_aim = SelectField("Цель проекта (коммерческий или тренировочный)",choices=[("commerce","Коммерческий"),("training", "Обучающий")], validators=[DataRequired()])
+    project_body = CKEditorField("Суть проекта", validators=[DataRequired()])
+    repositary_link = StringField("Ссылка на репозиторий", validators=[DataRequired()])
+    submit = SubmitField("Подтвердить")
 app = Flask(__name__)
 Bootstrap(app)
 
@@ -103,6 +110,13 @@ class Users(UserMixin, db.Model):
     email = db.Column(db.String(250), unique=False, nullable=False)
     password = db.Column(db.String(250), unique=False, nullable=False)
 
+class Portfolio(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    project_name = db.Column(db.String(250), unique=True, nullable=False)
+    tech_name =db.Column(db.String(250), unique=False, nullable=False)
+    project_aim = db.Column(db.String(250), unique=False, nullable=False)
+    project_body = db.Column(db.String(6000), unique=False, nullable=False)
+    repositary_link = db.Column(db.String(250), unique=False, nullable=False)
 # db.create_all()
 
 
@@ -120,6 +134,9 @@ def index():
 def register():
     form = RegisterForm()
     if request.method == "POST":
+        if Users.query.filter_by(email=form.email.data).first():
+            flash("Пользователь с таким адресом электронной почты уже зарегистрирован")
+            return redirect(url_for("login"))
         hash_and_salted_password = generate_password_hash(
             request.form.get("password"),
             method="pbkdf2:sha256",
@@ -145,7 +162,13 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
         user = Users.query.filter_by(email=email).first()
-        if check_password_hash(user.password, password):
+        if not user:
+            flash("Пользователя с таким адресом электронной почты не существует")
+            return redirect(url_for("login"))
+        elif not check_password_hash(user.password, password):
+            flash("Неправильный пароль")
+            return redirect(url_for("login"))
+        else:
             login_user(user)
             return redirect(url_for("index"))
     return render_template("login.html", form=form, is_loggedin=current_user.is_authenticated)
@@ -260,6 +283,28 @@ def edit_post(post_number):
         db.session.commit()
         return redirect(url_for('blog', blog_post=post_number))
     return render_template("add_post.html", form = edit_post, current_user = current_user)
+
+@app.route("/portfolio")
+def portfolio():
+    all_portfolio_cases = Portfolio.query.all()
+    return render_template("portfolio.html", posts = all_portfolio_cases)
+
+@app.route("/add_portfolio_case", methods = ["GET","POST"])
+def add_portfolio_case():
+    form = PortfolioForm()
+    if request.method == "POST":
+        new_case = Portfolio(
+        project_name = form.project_name.data,
+        tech_name = form.tech_name.data,
+        project_aim = form.project_name.data,
+        project_body = form.project_body.data,
+        repositary_link = form.repositary_link.data
+        )
+        db.session.add(new_case)
+        db.session.commit()
+        return redirect("portfolio")
+    return render_template("add_portfolio.html", form=form)
+
 if __name__ == "__main__":
     app.run(debug=True)
 
@@ -268,22 +313,21 @@ if __name__ == "__main__":
 #Todo 1.1.1 Сделать CSS блога
 #Todo 1.4 Добавить изображения
 
-# TODO 2 сделать верстку понятной, что ты залогинился или нет
+#Todo 2. Разбораться с белыми полосами и размером страниц
 
 #Todo 3 Сделать рефактор кода
 #TOdo 3.1. Сделать рефактор КСС
 #Todo 3.2. Сделать рефактор темплейтов, проверить существующие классы на их наличие в КСС
 
 #Todo 4. Исправить баги
-
 #Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
 
 
 # Todo 6. Сделать портфолио
-# Todo 6.1 Сделать раздел портфолио
+# Todo 6.1 Сделать раздел портфолио - сделано
 # Todo 6.2 Сделать верстку портфолио (вероятный дизайн - две колонки, внизу отдельный див с информацией об обучающих мини-проектах)
 # Todo 6.3 сделать ссылки на ГитХаб или Репл.ит с примерами кода соответтсвующих проектов
-#Todo 6.4 Прикрипить примеры работы на карусель на основной странице
+#Todo 6.4 Прикрепить примеры работы на карусель на основной странице
 
 # Todo 7. Поставить на сервер
 
@@ -298,17 +342,11 @@ if __name__ == "__main__":
 
 #Todo 10. Страница, посвященная стеку технологий
 # Todo 10.1. Краткое описание технологии, мой уровень владения ей, чем полезна
-# Todo 10.2 Для основых и второстепенных технооогий
+# Todo 10.2 Для основых и второстепенных технологий
 
 #Todo 11. Поработать над основным заполенинем сайта
 #Todo 11.1 Убрать все заглушки и поставить нормальную, действующую информацию
 
-
-#Todo 13 Создать див на странице о себе, посвященный пройденным курсам и прочитанным книгам -выполнено
-
-
-#Todo 15.1 Офомление титульной страница
-#Todo 15.4 Кнопка - мои работы??
 
 #Todo 16 Сделать реляционное взаимодействие баз
 #Todo 16.1 Сделать сортировку по теме технологий
@@ -317,6 +355,5 @@ if __name__ == "__main__":
 
 #Todo 18 Уменьшить размер значков футера
 
-#Todo 19 Сделать высвечивание флешек при действиях логина и пр.
 
 #Todo 20 Доработать CSS страниц с формами

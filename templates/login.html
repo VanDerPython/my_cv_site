@@ -2,8 +2,15 @@
 {% import "bootstrap/wtf.html" as wtf %}
       <div>
               <div class="container col-6" style="justify-content:center">
+{% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                  {% for message in messages %}
+                  <p style="color:red; font-size:20px;"><strong>{{ message}}</strong></p>
+                  {% endfor %}
+                  {% endif %}
+                  {% endwith%}
 
-                            #Add WTF quickform
+
         {{ wtf.quick_form(form, novalidate=True) }}
               </div>
 

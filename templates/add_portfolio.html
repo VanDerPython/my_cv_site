@@ -1,0 +1,25 @@
+{% include "header.html"%}
+{% import "bootstrap/wtf.html" as wtf %}
+{% if is_edit == True%}
+<p> Редактирование места работы</p>
+{% endif %}
+
+
+<div>
+<div class="container col-6" style="justify-content:center;">
+
+
+        #Load ckeditor
+        {{ ckeditor.load() }}
+
+        #Configure the ckeditor to tell it which field in WTForm will need to be a CKEditor.
+        {{ ckeditor.config(name='body',enterMode = ckeditor.ENTER_BR) }}
+
+        #Add WTF quickform
+        {{ wtf.quick_form(form, novalidate=True) }}
+
+
+</div>
+</div>
+
+{% include "footer.html" %}

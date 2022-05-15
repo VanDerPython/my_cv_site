@@ -1,0 +1,24 @@
+{% include "header.html" %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {% for post in posts %}
+            <div>
+                <a href="{{url_for('read_post',post_number = post.id)}}">
+                    <h2 style="text-align:center;">
+                        {{post.project_name}}
+                    </h2>
+                    <h3 style="text-align:left;" style="text-align:justify;">
+                        {{post.project_body|safe}}
+                    </h3>
+                </a>
+                <p>Стек технологий: {{post.tech_name}} Назначение проекта: {{post.project_aim}}</p>
+            </div>
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+<a href="{{url_for('add_portfolio_case')}}" class="button large scrolly">Добавить пост</a>
+{% include "footer.html" %}
