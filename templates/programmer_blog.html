@@ -23,6 +23,7 @@
     </div>
 
 </div>
+{% elif current_user.id == 1 %}
 <a href="{{url_for('add_post')}}" class="button large scrolly">Добавить пост</a>
 {% else %}
 <h1> Чтобы получить доступ к блогу, Вам необходимо зарегистрироваться и (или) авторизоваться</h1>

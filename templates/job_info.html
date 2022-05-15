@@ -27,9 +27,11 @@
 
 	{% endfor %}
 </div>
+{% if current_user.id == 1 %}
 <div>
 <a href="{{url_for('edit_job',job_post = post.id)}}" class="button button-portfolio">Редактировать</a>
 </div>
+{% endif %}
 
 
 {% include "footer.html" %}

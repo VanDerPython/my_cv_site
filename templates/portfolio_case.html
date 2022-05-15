@@ -23,9 +23,11 @@
 
 
 </div>
+{% if current_user.id == 1 %}
 <div>
 <a href="{{url_for('portfolio_edit',case = post.id)}}" class="button button-portfolio">Редактировать</a>
 </div>
+{% endif %}
 
 
 {% include "footer.html" %}

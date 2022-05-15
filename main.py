@@ -290,6 +290,7 @@ def portfolio():
     return render_template("portfolio.html", posts = all_portfolio_cases)
 
 @app.route("/add_portfolio_case", methods = ["GET","POST"])
+@admin_only
 def add_portfolio_case():
     form = PortfolioForm()
     if request.method == "POST":
@@ -303,7 +304,7 @@ def add_portfolio_case():
         db.session.add(new_case)
         db.session.commit()
         return redirect("portfolio")
-    return render_template("add_portfolio.html", form=form)
+    return render_template("add_portfolio.html", form=form,  is_loggedin = current_user.is_authenticated)
 
 @app.route("/portfolio/case<int:case>")
 def portfolio_case(case):
@@ -311,6 +312,7 @@ def portfolio_case(case):
     return render_template("portfolio_case.html", post = selected_case)
 
 @app.route("/portfolio/edit_case<int:case>", methods = ["GET","POST"])
+@admin_only
 def portfolio_edit(case):
     case = Portfolio.query.get(case)
     edit_case = PortfolioForm(

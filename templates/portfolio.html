@@ -20,5 +20,7 @@
     </div>
 
 </div>
+{% if current_user.id == 1%}
 <a href="{{url_for('add_portfolio_case')}}" class="button large scrolly">Добавить проект</a>
+{% endif %}
 {% include "footer.html" %}
