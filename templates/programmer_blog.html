@@ -26,6 +26,8 @@
 <a href="{{url_for('add_post')}}" class="button large scrolly">Добавить пост</a>
 {% else %}
 <h1> Чтобы получить доступ к блогу, Вам необходимо зарегистрироваться и (или) авторизоваться</h1>
+<a href="{{url_for('login')}}" class="button large scrolly">Войти</a>
+<a href="{{url_for('register')}}" class="button large scrolly">Зарегистрироваться</a>
 {% endif %}
 
 {% include "footer.html" %}
