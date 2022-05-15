@@ -202,7 +202,11 @@ def add_job():
 @app.route("/about")
 def about():
     posts = JobPost.query.all()
-    return render_template("about.html", posts=posts, is_loggedin=current_user.is_authenticated)
+    dt1 = dt.datetime(2022, 2, 22)
+    dt2 = dt.datetime.now()
+    days_passed = dt2 - dt1
+
+    return render_template("about.html", posts=posts, is_loggedin=current_user.is_authenticated, days = days_passed.days)
 
 
 @app.route("/job<int:job_post>")
@@ -370,13 +374,13 @@ if __name__ == "__main__":
 #Todo 11. Поработать над основным заполенинем сайта
 #Todo 11.1 Убрать все заглушки и поставить нормальную, действующую информацию
 
-#Todo 12. Поставить таймер на страницу - резюме
+#Todo 12. Поставить таймер на страницу - резюме - сделано
 #Todo 16 Сделать реляционное взаимодействие баз
 #Todo 16.1 Сделать сортировку по теме технологий
 
 #Todo 17 сделать файловую систему
 
-#Todo 18 Уменьшить размер значков футера на титульном листе
+#Todo 18 Уменьшить размер значков футера на титульном листе -сделано
 
 
-#Todo 20 Доработать CSS страниц с формами
+#Todo 20 Доработать CSS страниц с формами - сделано
