@@ -296,7 +296,7 @@ def add_portfolio_case():
         new_case = Portfolio(
         project_name = form.project_name.data,
         tech_name = form.tech_name.data,
-        project_aim = form.project_name.data,
+        project_aim = form.project_aim.data,
         project_body = form.project_body.data,
         repositary_link = form.repositary_link.data
         )
@@ -333,8 +333,6 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 #TODO 1. Сделать раздел блога
-#TODO 1.1 Сделать верстку блога
-#Todo 1.1.1 Сделать CSS блога
 #Todo 1.4 Добавить изображения
 
 #Todo 2. Разбораться с белыми полосами и размером страниц
@@ -350,7 +348,6 @@ if __name__ == "__main__":
 
 # Todo 6. Сделать портфолио
 # Todo 6.2 Сделать верстку портфолио (вероятный дизайн - две колонки, внизу отдельный див с информацией об обучающих мини-проектах)
-# Todo 6.3 сделать ссылки на ГитХаб или Репл.ит с примерами кода соответтсвующих проектов
 #Todo 6.4 Прикрепить примеры работы на карусель на основной странице
 
 # Todo 7. Поставить на сервер
