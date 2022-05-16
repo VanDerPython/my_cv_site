@@ -4,8 +4,9 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-12 col-12-large col-12-medium">
-
+						{% if post.img%}
 							<span><img style="width:200px;" src="{{url_for('static', filename=post.img)}}" alt="" /></span>
+						{% endif %}
 						</div>
 						<div class="col-12 col-12-large col-12-medium">
 								<h2>{{post.post_title}}</h2>
@@ -27,6 +28,7 @@
 {% if current_user.id  == 1%}
 <div>
 <a href="{{url_for('edit_post',post_number = post.id)}}" class="button button-portfolio">Редактировать</a>
+	<a href="{{url_for('post_delete',post_number = post.id)}}" class="button button-portfolio">Удалить</a>
 </div>
 {% endif %}
 

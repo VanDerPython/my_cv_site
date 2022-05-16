@@ -303,7 +303,13 @@ def edit_post(post_number):
         db.session.commit()
         return redirect(url_for('blog', blog_post=post_number))
     return render_template("add_post.html", form = edit_post, current_user = current_user)
-
+@app.route("/blog/delete_post<int:post_number>")
+@admin_only
+def post_delete(post_number):
+    case_to_delete = BlogPost.query.get(post_number)
+    db.session.delete(case_to_delete)
+    db.session.commit()
+    return redirect(url_for('blog'))
 @app.route("/portfolio")
 def portfolio():
     all_portfolio_cases = Portfolio.query.all()
@@ -350,13 +356,17 @@ def portfolio_edit(case):
         db.session.commit()
         return redirect(url_for('portfolio'))
     return render_template("add_portfolio.html", form=edit_case, current_user=current_user)
-
+@app.route("/portfolio/delete_case<int:case>")
+@admin_only
+def portfolio_delete(case):
+    case_to_delete = Portfolio.query.get(case)
+    db.session.delete(case_to_delete)
+    db.session.commit()
+    return redirect(url_for('portfolio'))
 if __name__ == "__main__":
     app.run(debug=True)
 
 #TODO 1. Сделать раздел блога
-#Todo 1.4 Добавить изображения - сделано
-# Todo 1.5 сделать изображения динамичными и соответствующими
 
 #Todo 3 Сделать рефактор кода
 #TOdo 3.1. Сделать рефактор КСС
@@ -365,7 +375,7 @@ if __name__ == "__main__":
 #Todo 4. Исправить баги
 #Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
 
-#Todo 5. Сделать кнопку для админа - удалить пост, работу, проект
+#Todo 5. Сделать кнопку для админа - удалить пост, работу, проект - сделано
 
 # Todo 6. Сделать портфолио
 # Todo 6.2 Сделать верстку портфолио (вероятный дизайн - две колонки, внизу отдельный див с информацией об обучающих мини-проектах)
