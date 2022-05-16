@@ -9,11 +9,13 @@ import sqlite3
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import datetime as dt
 import os
 import re
 SECRET_KEY = os.urandom(32)
-
+UPLOAD_FOLDER = '/files'
+ALLOWED_EXTENSTION = {"txt",'pdf','png','jpg','jpeg','gif'}
 
 def admin_only(f):
     @wraps(f)
@@ -38,6 +40,7 @@ class BlogForm(FlaskForm):
     post_subtitle = StringField("Подзаголовок", validators=[DataRequired()])
     author = StringField("Автор", validators=[DataRequired()])
     topic = StringField("Тема публикации", validators=[DataRequired()])
+    img = FileField("Картинки")
     body = CKEditorField("Пост", validators=[DataRequired()])
     submit = SubmitField("Подтвердить")
 
@@ -64,7 +67,10 @@ class PortfolioForm(FlaskForm):
     submit = SubmitField("Подтвердить")
 app = Flask(__name__)
 Bootstrap(app)
-
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+def allowed_file(filename):
+    return "." in filename and \
+filename.rsplit(',',1)[1].lower() in ALLOWED_EXTENSTION
 #Connect to DB
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///jobs.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -246,6 +252,8 @@ def blog():
 def add_post():
     form = BlogForm()
     if request.method == "POST":
+        file_dir = os.path.join(os.path.dirname(app.instance_path), "static/images")
+        file = form.img.data
         new_post = BlogPost(
         post_title=form.post_title.data,
         post_subtitle = form.post_subtitle.data,
@@ -256,13 +264,19 @@ def add_post():
         )
         db.session.add(new_post)
         db.session.commit()
+        file.filename = f"blog{form.post_title.data}.png"
+        safe_filename = secure_filename(file.filename)
+        file.save(os.path.join(file_dir,safe_filename))
         return redirect(url_for('blog'))
+
     return render_template("add_post.html", form = form, current_user = current_user,is_loggedin = current_user.is_authenticated)
 
 @app.route("/post<post_number>")
 def read_post(post_number):
     selected_post = BlogPost.query.get(post_number)
-    return render_template("post.html", post = selected_post,is_loggedin = current_user.is_authenticated)
+    selected_file = f"images/uploaded/blog{selected_post.post_title}.png"
+    print(selected_file)
+    return render_template("post.html",file = selected_file, post = selected_post,is_loggedin = current_user.is_authenticated)
 
 @app.route("/contacts")
 def contacts():
@@ -340,8 +354,7 @@ if __name__ == "__main__":
 
 #TODO 1. Сделать раздел блога
 #Todo 1.4 Добавить изображения
-
-# TODO 2. Сделать явными названия страниц, на которых ты сейчас находишься
+# Todo 1.5 сделать изображения динамичными и соответствующими
 
 #Todo 3 Сделать рефактор кода
 #TOdo 3.1. Сделать рефактор КСС
@@ -374,13 +387,15 @@ if __name__ == "__main__":
 #Todo 11. Поработать над основным заполенинем сайта
 #Todo 11.1 Убрать все заглушки и поставить нормальную, действующую информацию
 
-#Todo 12. Поставить таймер на страницу - резюме - сделано
+#Todo 12.  Сделать отправку сообщения по почте формы
+
+#Todo 13. Поставить паролизатор на регистрацию
+
 #Todo 16 Сделать реляционное взаимодействие баз
 #Todo 16.1 Сделать сортировку по теме технологий
 
 #Todo 17 сделать файловую систему
 
-#Todo 18 Уменьшить размер значков футера на титульном листе -сделано
 
-
+# Todo 18 Сделать hr немного потемнее
 #Todo 20 Доработать CSS страниц с формами - сделано

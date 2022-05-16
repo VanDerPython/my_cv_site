@@ -8,6 +8,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             {% for post in posts %}
             <div>
+
                 <a href="{{url_for('read_post',post_number = post.id)}}">
                     <h2 style="text-align:center;">
                         {{post.post_title}}
@@ -24,12 +25,15 @@
     </div>
 
 </div>
-{% elif current_user.id == 1 %}
-<a href="{{url_for('add_post')}}" class="button large scrolly">Добавить пост</a>
+
 {% else %}
 <h2> Чтобы получить доступ к блогу, Вам необходимо зарегистрироваться и (или) авторизоваться</h2>
 <a href="{{url_for('login')}}" class="button large scrolly">Войти</a>
 <a href="{{url_for('register')}}" class="button large scrolly">Зарегистрироваться</a>
 {% endif %}
-
+{% if current_user.id == 1 %}
+<a href="{{url_for('add_post')}}" class="button large scrolly">Добавить пост</a>
+{% else %}
+<p></p>
+{% endif %}
 {% include "footer.html" %}
