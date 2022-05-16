@@ -1,15 +1,21 @@
 {% include "header.html" %}
 <article id="top" style="font-weight:900; padding-top:30px; padding-bottom:30px;">
     <h1>Портфолио</h1>
+    {% for t in tech %}
+    {{t.parent }}
+    {% endfor %}
 </article>
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             {% for post in posts %}
+            <p>{{post.children.technology_name}}</p>
             <div>
                 <a href="{{url_for('portfolio_case',case = post.id)}}">
                     <h2 style="text-align:center;">
                         {{post.project_name}}
+
+
                     </h2>
                     <h3 style="text-align:left;" style="text-align:justify;">
                         {{post.project_body|safe}}

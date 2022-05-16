@@ -6,6 +6,8 @@ from wtforms import StringField, SubmitField, FileField, PasswordField, SelectFi
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired
 import sqlite3
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -119,13 +121,21 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String(250), unique=False, nullable=False)
 
 class Portfolio(db.Model):
+    __tablename__= "portfolio"
     id = db.Column(db.Integer,primary_key=True)
     project_name = db.Column(db.String(250), unique=True, nullable=False)
-    tech_name =db.Column(db.String(250), unique=False, nullable=False)
+    technology_id = db.Column(db.Integer, ForeignKey("technology.id"))
     project_aim = db.Column(db.String(250), unique=False, nullable=False)
     project_body = db.Column(db.String(6000), unique=False, nullable=False)
+    img = db.Column(db.String(250))
     repositary_link = db.Column(db.String(250), unique=False, nullable=False)
-# db.create_all()
+    children = relationship("Technology", back_populates="parent")
+class Technology(db.Model):
+    __tablename__ = "technology"
+    id = db.Column(db.Integer, primary_key = True)
+    technology_name = db.Column(db.String(250), unique = True, nullable = False)
+    parent = relationship("Portfolio", back_populates = "children")
+db.create_all()
 
 
 @app.route("/")
@@ -267,9 +277,10 @@ def add_post():
         )
         db.session.add(new_post)
         db.session.commit()
-        file.filename = f"blog{form.post_title.data}.png"
-        safe_filename = secure_filename(file.filename)
-        file.save(os.path.join(file_dir,safe_filename))
+        if file:
+            file.filename = f"blog{form.post_title.data}.png"
+            safe_filename = secure_filename(file.filename)
+            file.save(os.path.join(file_dir,safe_filename))
         return redirect(url_for('blog'))
 
     return render_template("add_post.html", form = form, current_user = current_user,is_loggedin = current_user.is_authenticated)
@@ -278,7 +289,6 @@ def add_post():
 def read_post(post_number):
     selected_post = BlogPost.query.get(post_number)
     selected_file = selected_post.img
-    print(selected_file)
     return render_template("post.html",file = selected_file, post = selected_post,is_loggedin = current_user.is_authenticated)
 
 @app.route("/contacts")
@@ -314,28 +324,41 @@ def post_delete(post_number):
 @app.route("/portfolio")
 def portfolio():
     all_portfolio_cases = Portfolio.query.all()
-    return render_template("portfolio.html", posts = all_portfolio_cases)
+    all_techs = Technology.query.all()
+    return render_template("portfolio.html", posts = all_portfolio_cases, tech = all_techs)
 
 @app.route("/add_portfolio_case", methods = ["GET","POST"])
 @admin_only
 def add_portfolio_case():
     form = PortfolioForm()
+    technology = Technology.query.all()
+    technology_list=[item.technology_name for item in technology]
     if request.method == "POST":
         file_dir = os.path.join(os.path.dirname(app.instance_path), "static/images/uploaded")
         file = form.img.data
+        new_technology_name = form.tech_name.data
+        existing_technology = Technology.query.filter_by(technology_name = new_technology_name).first()
         new_case = Portfolio(
         project_name = form.project_name.data,
-        tech_name = form.tech_name.data,
         project_aim = form.project_aim.data,
+        technology_id = existing_technology.id,
         project_body = form.project_body.data,
         repositary_link = form.repositary_link.data,
         img = f"images/uploaded/port{form.project_name.data}.png"
         )
         db.session.add(new_case)
         db.session.commit()
-        file.filename = f"blog{form.project_name.data}.png"
-        safe_filename = secure_filename(file.filename)
-        file.save(os.path.join(file_dir, safe_filename))
+        if not new_technology_name in technology_list:
+            new_technology = Technology(
+                technology_name=new_technology_name
+            )
+            db.session.add(new_technology)
+            db.session.commit()
+            new_case.technology_id = new_technology.id
+        if file:
+            file.filename = f"blog{form.project_name.data}.png"
+            safe_filename = secure_filename(file.filename)
+            file.save(os.path.join(file_dir, safe_filename))
         return redirect(url_for("portfolio"))
     return render_template("add_portfolio.html", form=form,  is_loggedin = current_user.is_authenticated)
 
