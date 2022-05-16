@@ -81,7 +81,7 @@ login_manager.init_app(app)
 #Коррекция базы данных (УДАЛИТЬ)
 # db_correction = sqlite3.connect("jobs.db")
 # cursor = db_correction.cursor()
-# cursor.execute(f"ALTER TABLE job_post ADD COLUMN font_awesome 'string'")
+# cursor.execute(f"ALTER TABLE blog_post ADD COLUMN img 'string'")
 ckeditor = CKEditor(app)
 app.config["SECRET_KEY"] = SECRET_KEY
 
@@ -108,6 +108,7 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), unique=False, nullable=False)
     topic = db.Column(db.String(250), unique=False, nullable=False)
     body = db.Column(db.String(250), unique=True, nullable=False)
+    img = db.Column(db.String(250), unique = False, nullable = False)
 
 
 class Users(UserMixin, db.Model):
@@ -252,7 +253,7 @@ def blog():
 def add_post():
     form = BlogForm()
     if request.method == "POST":
-        file_dir = os.path.join(os.path.dirname(app.instance_path), "static/images")
+        file_dir = os.path.join(os.path.dirname(app.instance_path), "static/images/uploaded")
         file = form.img.data
         new_post = BlogPost(
         post_title=form.post_title.data,
@@ -261,6 +262,7 @@ def add_post():
         date = dt.datetime.now().strftime("%d.%m.%Y"),
         topic = form.topic.data,
         body = form.body.data,
+        img = f"images/uploaded/blog{form.post_title.data}.png"
         )
         db.session.add(new_post)
         db.session.commit()
@@ -274,7 +276,7 @@ def add_post():
 @app.route("/post<post_number>")
 def read_post(post_number):
     selected_post = BlogPost.query.get(post_number)
-    selected_file = f"images/uploaded/blog{selected_post.post_title}.png"
+    selected_file = selected_post.img
     print(selected_file)
     return render_template("post.html",file = selected_file, post = selected_post,is_loggedin = current_user.is_authenticated)
 
@@ -353,7 +355,7 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 #TODO 1. Сделать раздел блога
-#Todo 1.4 Добавить изображения
+#Todo 1.4 Добавить изображения - сделано
 # Todo 1.5 сделать изображения динамичными и соответствующими
 
 #Todo 3 Сделать рефактор кода

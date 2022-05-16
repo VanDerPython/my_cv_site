@@ -8,7 +8,9 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             {% for post in posts %}
             <div>
-
+                {%if post.img%}
+                <span class="image fit"><img class="homepage-image" style="width:200px;" src="{{url_for('static', filename=post.img)}}" alt="" /></span>
+                {% endif %}
                 <a href="{{url_for('read_post',post_number = post.id)}}">
                     <h2 style="text-align:center;">
                         {{post.post_title}}
