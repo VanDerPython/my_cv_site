@@ -48,7 +48,7 @@ class BlogForm(FlaskForm):
 class RegisterForm(FlaskForm):
     name = StringField("Никнейм", validators=[DataRequired()])
     email = StringField("Адрес эл.почты", validators=[DataRequired()])
-    password = StringField("Пароль", validators=[DataRequired()])
+    password = PasswordField("Пароль", validators=[DataRequired()])
     submit = SubmitField("Подтвердить")
 
 
@@ -64,6 +64,7 @@ class PortfolioForm(FlaskForm):
     project_aim = SelectField("Цель проекта (коммерческий или тренировочный)",choices=[("commerce","Коммерческий"),("training", "Обучающий")], validators=[DataRequired()])
     project_body = CKEditorField("Суть проекта", validators=[DataRequired()])
     repositary_link = StringField("Ссылка на репозиторий", validators=[DataRequired()])
+    img = FileField("Изображения")
     submit = SubmitField("Подтвердить")
 app = Flask(__name__)
 Bootstrap(app)
@@ -81,7 +82,7 @@ login_manager.init_app(app)
 #Коррекция базы данных (УДАЛИТЬ)
 # db_correction = sqlite3.connect("jobs.db")
 # cursor = db_correction.cursor()
-# cursor.execute(f"ALTER TABLE blog_post ADD COLUMN img 'string'")
+# cursor.execute(f"ALTER TABLE portfolio ADD COLUMN img 'string'")
 ckeditor = CKEditor(app)
 app.config["SECRET_KEY"] = SECRET_KEY
 
@@ -320,16 +321,22 @@ def portfolio():
 def add_portfolio_case():
     form = PortfolioForm()
     if request.method == "POST":
+        file_dir = os.path.join(os.path.dirname(app.instance_path), "static/images/uploaded")
+        file = form.img.data
         new_case = Portfolio(
         project_name = form.project_name.data,
         tech_name = form.tech_name.data,
         project_aim = form.project_aim.data,
         project_body = form.project_body.data,
-        repositary_link = form.repositary_link.data
+        repositary_link = form.repositary_link.data,
+        img = f"images/uploaded/port{form.project_name.data}.png"
         )
         db.session.add(new_case)
         db.session.commit()
-        return redirect("portfolio")
+        file.filename = f"blog{form.project_name.data}.png"
+        safe_filename = secure_filename(file.filename)
+        file.save(os.path.join(file_dir, safe_filename))
+        return redirect(url_for("portfolio"))
     return render_template("add_portfolio.html", form=form,  is_loggedin = current_user.is_authenticated)
 
 @app.route("/portfolio/case<int:case>")
@@ -375,7 +382,6 @@ if __name__ == "__main__":
 #Todo 4. Исправить баги
 #Todo 4.4. Поймать ошибку базы при попытке сделать пост с одинаковым названием
 
-#Todo 5. Сделать кнопку для админа - удалить пост, работу, проект - сделано
 
 # Todo 6. Сделать портфолио
 # Todo 6.2 Сделать верстку портфолио (вероятный дизайн - две колонки, внизу отдельный див с информацией об обучающих мини-проектах)
@@ -401,7 +407,7 @@ if __name__ == "__main__":
 
 #Todo 12.  Сделать отправку сообщения по почте формы
 
-#Todo 13. Поставить паролизатор на регистрацию
+#Todo 13. Поставить паролизатор на регистрацию - done
 
 #Todo 16 Сделать реляционное взаимодействие баз
 #Todo 16.1 Сделать сортировку по теме технологий

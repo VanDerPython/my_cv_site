@@ -45,9 +45,9 @@ a:active{
 color:blue;
 }
 hr {
-    border: 6px dotted #EEEEEE;
+    border: 6px dotted #919090;
     border-style: none none dotted;
-    color: #fff;
+    color: #919090;
     background-color: #fff;
     width:50px;
 }

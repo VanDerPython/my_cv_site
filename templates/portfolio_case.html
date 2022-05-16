@@ -4,7 +4,9 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-12 col-12-large col-12-medium">
-							<span class="image fit"><img style="width:200px;" src="https://fgup-ohrana.ru/upload/iblock/b8c/gkdh01cohy5gizr307ch9fr9j7vd7fxu.jpg" alt="" /></span>
+							{%if post.img%}
+							<span class="image fit"><img style="width:200px;" src="{{url_for('static', filename = post.img)}}" alt="" /></span>
+						{% endif %}
 						</div>
 						<div class="col-12 col-12-large col-12-medium">
 								<h2>{{post.project_name}}</h2>
@@ -18,7 +20,7 @@
 	<div class="container col-8" style="justify-content:center; padding-top:20px;">
 		{{post.project_body|safe}}
 		<h5><strong>Стек технологий</strong> {{post.tech_name}} </h5>
-						<h5><strong>Назначение проекта</strong> {{post.project_aim}}}</h5>
+						<h5><strong>Назначение проекта</strong> {{post.project_aim}}</h5>
 	</div>
 
 
