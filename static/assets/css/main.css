@@ -195,6 +195,12 @@ width:600px;
 height:400px;
 width:600px;
 }
+@media only screen and (max-width: 775px) {
+    .img{
+    height:300px;
+    width:300px;
+    }
+}
 /*---------------О СЕБЕ----------- */
 .card-portfolio{
 width: 250px;
