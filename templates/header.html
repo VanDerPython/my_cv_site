@@ -38,8 +38,11 @@
         <a class ="nav-item nav-link" href="{{url_for('register')}}">Регистрация</a>
           </div>
         {% elif is_loggedin %}
+
       <div class="navbar-nav ml-auto">
+
         <a class ="nav-item nav-link" href="{{url_for('logout')}}">Выйти</a>
+          <p class="header-loggedin">{{current_user.name}}</p>
         </div>
           {% endif %}
     </div>

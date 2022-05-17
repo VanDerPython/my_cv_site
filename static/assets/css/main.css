@@ -20,7 +20,7 @@ padding:10px;
 h3{
 color:#222831;
 font-size:18px;
-padding-bottom:10px;
+padding-bottom:20px;
 font-family: 'Open Sans', sans-serif;
 font-weight:600;
 margin:0;
@@ -136,8 +136,8 @@ color:#393E46;
 /* ------------Главная страница---------------*/
 .box-text-style {
 color:#393E46;
-font-size:12px;
-line-height:15px;
+font-size:14px;
+line-height:18px;
 font-weight:300;
 padding:5%
 }
@@ -457,19 +457,19 @@ text-align:left;
 
 .contacts-p{
 font-size:15px;
+padding-bottom:30px;
 }
 
 .starting-page{
-margin-top:200px;
+margin-top:28%;
 margin-bottom:200px;
-padding-bottom:200px;
 
 }
 .starting-card{
 width: 300px;
 height: 240px;
 margin:30px;
-margin-top:300px;
+margin-top:30%;
 border-radius:12px;
 background-color: #EEEEEE;
 box-shadow: 0 0 12px rgb(63, 63, 63);
@@ -490,25 +490,47 @@ position:relative;
 margin-top:20px;
 margin-bottom:10px;
 }
+
+.starting-button{
+margin:0;
+margin-bottom:17px;
+}
+.starting-page-header{
+padding:0;}
+.starting-image-row{
+justify-content:left;
+}
 @media only screen and (max-width: 768px){
 .starting-page{
-margin:0;
+margin-top:0;
+margin-bottom:0;
 }
 .starting-image{
-margin-top:170px;
+margin-top:30%;
 margin-bottom:0;
-width:200px;
+width:100%;
 }
 .starting-card{
-margin-top:100px;
+margin-top:20%;
 margin-bottom:0;
-font-size:10px;
-height:20px;
+margin-left:20px;
+margin-right:20px;
+font-size:14px;
+height:1%;
 }
 h1{
 font-size:20px;
 }
-
+.starting-button{
+margin:0;
+margin-bottom:25px;
+}
+.starting-page-header{
+padding:0;
+}
+.starting-image-row{
+justify-content:left;
+}
 }
 
 .h2-education{
@@ -528,4 +550,17 @@ font-size: 13px;
 font-weight: 900;
 border-radius:12px;
 transition-duration: 0.4s;
+}
+.header-loggedin{
+color:white;
+padding-left:20px;
+margin-top:5px;
+margin-bottom:0;
+}
+
+.empty-filler{
+padding-bottom:20%;
+}
+.form-control{
+font-size:16px;
 }
