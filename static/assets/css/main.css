@@ -196,6 +196,9 @@ height:400px;
 width:600px;
 }
 @media only screen and (max-width: 775px) {
+    .carousel-item{
+    width:300px;
+    }
     .img{
     height:300px;
     width:300px;
