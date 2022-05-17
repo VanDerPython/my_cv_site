@@ -14,6 +14,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import datetime as dt
 import os
+import git
 import re
 SECRET_KEY = os.urandom(32)
 UPLOAD_FOLDER = '/files'
@@ -137,6 +138,15 @@ class Technology(db.Model):
     parent = relationship("Portfolio", back_populates = "children")
 db.create_all()
 
+@app.route("/update_server", methods = ['POST'])
+def webhook():
+    if request.method == "POST":
+        repo = git.Repo("/home/VanDerPython/.git")
+        origin = repo.remotes.origin
+        origin.pull()
+        return "Updated PythonAnywhere successfully",200
+    else:
+        return "Wrong eveny type",400
 
 @app.route("/")
 def start():
