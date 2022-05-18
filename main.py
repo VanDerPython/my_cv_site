@@ -242,23 +242,7 @@ def job(job_post):
     current_post = JobPost.query.get(job_post)
     return render_template("job_info.html",post = current_post,is_loggedin = current_user.is_authenticated)
 
-@app.route("/edit_job/job<int:job_post>",methods=["GET","POST"])
-@admin_only
-def edit_job(job_post):
-    post = JobPost.query.get(job_post)
-    edit_job = JobForm(
-            place = post.job_title,
-            date = post.working_time,
-            achievements = post.achievements,
-            position = post.position)
-    if request.method == "POST":
-        post.job_title = edit_job.place.data
-        post.working_time = edit_job.date.data
-        post.achievements = edit_job.achievements.data
-        post.position = edit_job.position.data
-        db.session.commit()
-        return redirect(url_for("job", job_post = job_post))
-    return render_template("add_job.html", form =edit_job, is_edit = True, current_user=current_user,is_loggedin = current_user.is_authenticated)
+
 
 
 @app.route("/blog")
@@ -305,25 +289,7 @@ def read_post(post_number):
 def contacts():
     return render_template("contacts.html", is_loggedin = current_user.is_authenticated)
 
-@app.route("/edit_post/post<int:post_number>", methods=["GET","POST"])
-@admin_only
-def edit_post(post_number):
-    post = BlogPost.query.get(post_number)
-    edit_post = BlogForm(
-    post_title=post.post_title,
-    post_subtitle = post.post_subtitle,
-    author = post.author,
-    topic = post.topic,
-    body = post.body)
-    if request.method == "POST":
-        post.post_title = edit_post.post_title.data
-        post.post_subtitle = edit_post.post_subtitle.data
-        post.author = edit_post.author.data
-        post.topic = edit_post.topic.data
-        post.body = edit_post.body.data
-        db.session.commit()
-        return redirect(url_for('blog', blog_post=post_number))
-    return render_template("add_post.html", form = edit_post, current_user = current_user)
+
 @app.route("/blog/delete_post<int:post_number>")
 @admin_only
 def post_delete(post_number):
@@ -377,6 +343,56 @@ def portfolio_case(case):
     selected_case = Portfolio.query.get(case)
     return render_template("portfolio_case.html", post = selected_case)
 
+
+@app.route("/portfolio/delete_case<int:case>")
+@admin_only
+def portfolio_delete(case):
+    case_to_delete = Portfolio.query.get(case)
+    db.session.delete(case_to_delete)
+    db.session.commit()
+    return redirect(url_for('portfolio'))
+
+
+
+#Внесение изменений
+@app.route("/edit_job/job<int:job_post>",methods=["GET","POST"])
+@admin_only
+def edit_job(job_post):
+    post = JobPost.query.get(job_post)
+    edit_job = JobForm(
+            place = post.job_title,
+            date = post.working_time,
+            achievements = post.achievements,
+            position = post.position)
+    if request.method == "POST":
+        post.job_title = edit_job.place.data
+        post.working_time = edit_job.date.data
+        post.achievements = edit_job.achievements.data
+        post.position = edit_job.position.data
+        db.session.commit()
+        return redirect(url_for("job", job_post = job_post))
+    return render_template("add_job.html", form =edit_job, is_edit = True, current_user=current_user,is_loggedin = current_user.is_authenticated)
+
+@app.route("/edit_post/post<int:post_number>", methods=["GET","POST"])
+@admin_only
+def edit_post(post_number):
+    post = BlogPost.query.get(post_number)
+    edit_post = BlogForm(
+    post_title=post.post_title,
+    post_subtitle = post.post_subtitle,
+    author = post.author,
+    topic = post.topic,
+    body = post.body)
+    if request.method == "POST":
+        post.post_title = edit_post.post_title.data
+        post.post_subtitle = edit_post.post_subtitle.data
+        post.author = edit_post.author.data
+        post.topic = edit_post.topic.data
+        post.body = edit_post.body.data
+        db.session.commit()
+        return redirect(url_for('blog', blog_post=post_number))
+    return render_template("add_post.html", form = edit_post, current_user = current_user)
+
 @app.route("/portfolio/edit_case<int:case>", methods = ["GET","POST"])
 @admin_only
 def portfolio_edit(case):
@@ -396,13 +412,12 @@ def portfolio_edit(case):
         db.session.commit()
         return redirect(url_for('portfolio'))
     return render_template("add_portfolio.html", form=edit_case, current_user=current_user)
-@app.route("/portfolio/delete_case<int:case>")
-@admin_only
-def portfolio_delete(case):
-    case_to_delete = Portfolio.query.get(case)
-    db.session.delete(case_to_delete)
-    db.session.commit()
-    return redirect(url_for('portfolio'))
+
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 

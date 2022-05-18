@@ -1,22 +1,15 @@
 {% include "header.html"%}
 {% import "bootstrap/wtf.html" as wtf %}
+<!-- Проверка был ли запрос на изменение или создание нового объекта -->
 {% if is_edit == True%}
-<p> Редактирование места работы</p>
+<h1> Редактирование места работы</h1>
+{% else %}
+<h1> Добавить место работы</h1>
 {% endif %}
-
-
-
-        #Load ckeditor
+<!-- WTForm с ckeditor -->
+<div class="container col-6" style="justify-content:center;">
         {{ ckeditor.load() }}
-
-        #Configure the ckeditor to tell it which field in WTForm will need to be a CKEditor.
         {{ ckeditor.config(name='achievements',enterMode = ckeditor.ENTER_BR) }}
-
-        #Add WTF quickform
         {{ wtf.quick_form(form, novalidate=True) }}
-
-
-
-
-
+</div>
 {% include "footer.html" %}
