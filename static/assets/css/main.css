@@ -187,11 +187,8 @@ flex:auto;
 height:100%;
 }
 .starting-image{
-display:block;
 clip-path: circle();
-width:350px;
- border:18px solid white;
-    border-radius: 500px;
+width:450px;
 height:auto;
 text-align:center;
 margin-left:auto;
