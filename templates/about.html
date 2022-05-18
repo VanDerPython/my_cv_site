@@ -1,16 +1,17 @@
 {% include "header.html" %}
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-		<!-- Short info-->
+		<!-- Краткая информация (секция слева)-->
 <div>
-<div class = "container justify-content-left col-lg-4 col-md-4 col-sm-12">
+<div class = "container col-lg-4 col-md-4 col-sm-12">
 	<div class="row cv-field vh-100">
 			<article id="top" >
 				<div class="container">
-					<div class="row justify-content-left">
+					<div class="row">
+                        <!-- Картинка -->
 						<div class="col-sm-12 col-lg-12 col-md-12">
-							<span class="image fit"><img class="homepage-image" src="{{url_for('static', filename = 'images/pic00.jpg')}}" alt="" /></span>
+							<span class="image"><img class="homepage-image" src="{{url_for('static', filename = 'images/pic00.jpg')}}" alt="" /></span>
 						</div>
 						    <div class="col-12-small col-12-large col-12-medium cv">
+                                <!-- Краткая информация о себе -->
 							    <header>
 								<h1>  <strong>Андрей Сошин</strong></h1>
 							    </header>
@@ -20,6 +21,7 @@
 							    <p><strong>Общий стаж работы:</strong> 6 лет, 4 месяца</p>
                                 <p><strong>Образование:</strong> Высшее</p>
                                 <p><strong>Дней, проведенных в изучении программирования: </strong>{{days}}</p>
+                                <!-- Блок навыков -->
                                 <div class="skill-set">
                                     <p><strong>Навыки программирования</strong></p>
                                     <p>Python  ★ ★ ★ ★ ★ ☆ ☆ ☆</p>
@@ -27,7 +29,7 @@
                                     <p>Безделье ☆ ☆ ☆ ☆ ☆</p>
                                     <p>Старание  ☆ ☆ ☆ ☆ ☆</p>
                                 </div>
-
+                                <!-- Блок навыков -->
                                 <div class="skill-set">
                                     <p><strong>Личные характеристики</strong></p>
                                     <p>Python  ★ ★ ★ ★ ★ ☆ ☆ ☆</p>
@@ -42,12 +44,12 @@
     </div>
 </div>
 
-<!-- Timeline -->
-<section class="timeline_area section_padding_130 col-lg-8 col-md-8 col-sm-12">
+<!-- Таймлайн -->
+<section class="col-lg-8 col-md-8 col-sm-12">
     <div class="container">
-        <div class="row justify-content-center">
-    <!-- Section Heading-->
-                <div class="section_heading text-center">
+        <div class="row">
+    <!-- Заголовок -->
+                <div>
                     <h2>Опыт работы</h2>
                     <h3 class="resume-h3">Кратко об имеющеемся опыте работы</h3>
                     <div class="line"></div>
@@ -56,19 +58,20 @@
     </div>
                 <div class="row box-position">
                     <div class="col-lg-8 col-md-8 col-sm-8">
-    <!-- Timeline Area-->
-                        <div class="apland-timeline-area">
-        <!-- Single Timeline Content-->
+    <!-- Блоки таймлайна-->
+                        <div>
+        <!-- Один блок таймлайна-->
                             {% for post in posts %}
                             <div class="single-timeline-area">
-
-                                <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="margin-top: 10px;visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+            <!-- Даты -->
+                                <div class="timeline-date">
                                     <p class = "time-line-text">{{post.working_time}}</p>
                                 </div>
+                                <!-- Место работы -->
                                 <a href="{{url_for('job',job_post = post.id)}}" class="anchor-black">
                                     <div class="row box-area" >
                                         <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <div class="single-timeline-content d-flex wow fadeInLeft dots" data-wow-delay="0.7s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;visibility: visible;padding: 0px;padding-bottom:10px; margin: 0px;">
+                                            <div class="single-timeline-content d-flex">
                                                 <div class="timeline-icon"><i class="fa fa-address-book fa-box" aria-hidden="true"></i></div>
                                                     <div class="timeline-text col-10">
                                                     <h6>{{post.job_title}}</h6>
@@ -79,11 +82,17 @@
                                     </div>
                                 </a>
                             </div>
+
         {% endfor %}
                 </div>
+                        <!-- Кнопка админа по добавлению места работы -->
+                        {% if current_user.id == 1%}
+<a href="{{url_for('add_job')}}" class="button large scrolly">Добавить место работы</a>
+{% endif %}
                     </div>
 
                 </div>
+    <!-- Блок образования -->
                            <div>
                                <div class="container col-8" style="margin-top:20px;">
                                    <h2>Основное образование</h2>
@@ -101,13 +110,12 @@
                                        <p><strong>Направление:</strong> Менеджмент</p>
 </div>
                                    </div>
-
+<!-- Блок самостоятельного образования-->
                                        <h2>Самостоятельное образование и изученные материалы</h2>
                                        <div class="row">
                               <ul>
                                   <li>Курс херни</li>
-                                  <li> Курс второй херни</li>
-
+                                  <li>Курс второй херни</li>
 
                               </ul>
 </div>
