@@ -15,12 +15,13 @@
 	</head>
 	<body>
 
-		<!-- Nav -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-custom">
+		<!-- Toggler NavBar -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <a href="{{url_for('start')}}"><span class="navbar-brand mb-0 h1" >VanDerPython</span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
+            <!-- Навигация -->
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link " href="{{url_for('index')}}">Домой <span class="sr-only">(current)</span></a>
@@ -29,11 +30,13 @@
                     <a class="nav-item nav-link" href="{{url_for('contacts')}}">Контакты</a>
                     <a class="nav-item nav-link" href="{{url_for('blog')}}">Путь программиста</a>
                 </div>
+                <!-- Элементы для незалогиненных -->
         {%if not is_loggedin%}
                     <div class="navbar-nav ml-auto">
                         <a class="nav-item nav-link" style="" href="{{url_for('login')}}">Войти</a>
                         <a class ="nav-item nav-link" href="{{url_for('register')}}">Регистрация</a>
                     </div>
+                <!-- Элементы залогиненных -->
         {% elif is_loggedin %}
                     <div class="navbar-nav ml-auto">
                         <a class ="nav-item nav-link" href="{{url_for('logout')}}">Выйти</a>
