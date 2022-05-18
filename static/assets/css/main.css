@@ -119,6 +119,12 @@ margin:20px 25px 50px;
 .fa-stack {
 color:#3f8dba;
 }
+.fa-stack:hover{
+color:black;
+ border-radius:50%;
+    box-shadow: 0 0 0 3px #00ADB5;
+transition-duration:0.4s;
+}
 /*Кнопки */
 .button {
 background-color:#3f8dba;
@@ -134,8 +140,8 @@ font-size: 13px;
 font-weight: 900;
 border-radius:12px;
 transition-duration: 0.4s;
-
 }
+
 .button:hover {
 text-decoration:none;
 color:#393E46;
