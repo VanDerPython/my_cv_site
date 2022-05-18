@@ -1,75 +1,47 @@
 <!DOCTYPE HTML>
-<!--
-	Miniport by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 	<head>
         <title>VanDerPython</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- Bootstrap 4.0 -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <!-- Подгрузка FA -->
         <link rel="stylesheet" href="{url_for('static', filename = 'assets/css/fontawesome-all.min.css'}}">
-		<link rel="stylesheet" href="{{url_for('static', filename = 'assets/css/main.css')}}" />
+		<!-- Подгрузка CSS-->
+        <link rel="stylesheet" href="{{url_for('static', filename = 'assets/css/main.css')}}" />
 	</head>
-	<body class="is-preload">
+	<body>
 
 		<!-- Nav -->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-custom">
-    <a href="{{url_for('start')}}"><span class="navbar-brand mb-0 h1" >VanDerPython</span></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link " href="{{url_for('index')}}">Домой <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="{{url_for('about')}}">О себе</a>
-      <a class="nav-item nav-link" href="{{url_for('portfolio')}}">Портфолио</a>
-      <a class="nav-item nav-link" href="{{url_for('contacts')}}">Контакты</a>
-        <a class="nav-item nav-link" href="{{url_for('blog')}}">Путь программиста</a>
-        </div>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-custom">
+        <a href="{{url_for('start')}}"><span class="navbar-brand mb-0 h1" >VanDerPython</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link " href="{{url_for('index')}}">Домой <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="{{url_for('about')}}">О себе</a>
+                    <a class="nav-item nav-link" href="{{url_for('portfolio')}}">Портфолио</a>
+                    <a class="nav-item nav-link" href="{{url_for('contacts')}}">Контакты</a>
+                    <a class="nav-item nav-link" href="{{url_for('blog')}}">Путь программиста</a>
+                </div>
         {%if not is_loggedin%}
-      <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link" style="" href="{{url_for('login')}}">Войти</a>
-        <a class ="nav-item nav-link" href="{{url_for('register')}}">Регистрация</a>
-          </div>
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-item nav-link" style="" href="{{url_for('login')}}">Войти</a>
+                        <a class ="nav-item nav-link" href="{{url_for('register')}}">Регистрация</a>
+                    </div>
         {% elif is_loggedin %}
-
-      <div class="navbar-nav ml-auto">
-
-        <a class ="nav-item nav-link" href="{{url_for('logout')}}">Выйти</a>
-          <p class="header-loggedin">{{current_user.name}}</p>
-        </div>
+                    <div class="navbar-nav ml-auto">
+                        <a class ="nav-item nav-link" href="{{url_for('logout')}}">Выйти</a>
+                        <p class="header-loggedin">{{current_user.name}}</p>
+                    </div>
           {% endif %}
-    </div>
-  </div>
-</nav>
+            </div>
+        </nav>
 
-		<!-- Home -->
-
-
-		<!-- Work -->
-
-
-		<!-- Portfolio -->
-
-
-		<!-- Contact -->
-
-
-		<!-- Scripts -->
-          <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-			<script src="static/assets/js/jquery.min.js"></script>
-			<script src="static/assets/js/jquery.scrolly.min.js"></script>
-			<script src="static/assets/js/browser.min.js"></script>
-			<script src="static/assets/js/breakpoints.min.js"></script>
-			<script src="static/assets/js/util.js"></script>
-			<script src="static/assets/js/main.js"></script>
 
 
