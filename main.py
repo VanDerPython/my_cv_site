@@ -178,13 +178,6 @@ class Technology(db.Model):
 # db.create_all()
 
 # ------------Основные страницы---------------
-# Стартовая страница
-
-
-@app.route("/")
-def start():
-    return render_template("starting_page.html")
-
 # Вебхук для обновления (пока не работает)
 
 
@@ -197,13 +190,19 @@ def webhook():
         return "Updated PythonAnywhere successfully", 200
     else:
         return "Wrong event type", 400
+# Стартовая страница
 
 
+@app.route("/")
+def start():
+    return render_template("starting_page.html")
+
+# Главная страница
 @app.route("/index")
 def index():
     return render_template("index.html", is_loggedin=current_user.is_authenticated)
 
-
+# Cтраница регистрации
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
@@ -228,7 +227,7 @@ def register():
         return redirect(url_for('blog'))
     return render_template("register.html", form=form, is_loggedin=current_user.is_authenticated)
 
-
+# Страница логина
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -247,7 +246,7 @@ def login():
             return redirect(url_for("index"))
     return render_template("login.html", form=form, is_loggedin=current_user.is_authenticated)
 
-
+# Страница выхода из учетной записи
 @app.route('/logout')
 def logout():
     logout_user()
