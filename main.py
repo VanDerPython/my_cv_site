@@ -400,7 +400,6 @@ def job(job_post):
 
 
 @app.route("/blog")
-@login_required
 def blog():
     """
     Функция, сопутствующая пути отображения всех постов блога "Путь программиста"
@@ -415,6 +414,7 @@ def blog():
 
 
 @app.route("/post<post_number>")
+@login_required
 def read_post(post_number):
     """
     Функция, сопутствующая пути отображения конкретного поста блога "Путь программиста"
